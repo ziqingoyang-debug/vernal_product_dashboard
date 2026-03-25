@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户体验分析</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+            background: #0f172a;
+            color: #fff;
+        }
+
+        .container {
+            padding: 30px;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 26px;
+            font-weight: 600;
+        }
+
+        .home-btn {
+            background: #3b82f6;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: #1e293b;
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #93c5fd;
+        }
+
+        .big-number {
+            font-size: 32px;
+            font-weight: 600;
+        }
+
+        .desc {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .table th, .table td {
+            padding: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            font-size: 13px;
+        }
+
+        .highlight {
+            color: #f87171;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- 顶部 -->
+    <div class="header">
+        <div class="title">📊 用户体验分析看板</div>
+        <button class="home-btn" onclick="goHome()">← 返回首页</button>
+    </div>
+
+    <!-- 核心指标 -->
+    <div class="grid">
+
+        <!-- 评分 -->
+        <div class="card">
+            <div class="card-title">评分表现</div>
+            <div class="big-number">4.3 ⭐</div>
+            <div class="desc">目标：4.5 ｜ 当前未达标</div>
+            <div class="desc">趋势：近30天下降</div>
+        </div>
+
+        <!-- 客诉率 -->
+        <div class="card">
+            <div class="card-title">问题客诉率</div>
+            <div class="big-number">2.8%</div>
+            <div class="desc">环比 +0.6% ｜ 主要受物流问题影响</div>
+        </div>
+
+        <!-- MOT -->
+        <div class="card">
+            <div class="card-title">MOT正向体验占比</div>
+            <div class="big-number">18%</div>
+            <div class="desc">用户主动好评点（惊喜/满意）</div>
+        </div>
+
+        <!-- 数据覆盖 -->
+        <div class="card">
+            <div class="card-title">VOC数据覆盖</div>
+            <div class="big-number">3,245</div>
+            <div class="desc">评论 + 客诉 + 社媒</div>
+        </div>
+
+    </div>
+
+    <!-- VOC问题结构 -->
+    <div class="card" style="margin-top:20px;">
+        <div class="card-title">VOC问题结构（Top问题）</div>
+
+        <table class="table">
+            <tr>
+                <th>问题类型</th>
+                <th>占比</th>
+                <th>趋势</th>
+            </tr>
+            <tr>
+                <td>物流延迟</td>
+                <td class="highlight">32%</td>
+                <td>↑</td>
+            </tr>
+            <tr>
+                <td>安装问题</td>
+                <td>21%</td>
+                <td>→</td>
+            </tr>
+            <tr>
+                <td>拼板设计</td>
+                <td>18%</td>
+                <td>↑</td>
+            </tr>
+            <tr>
+                <td>配件缺失</td>
+                <td>12%</td>
+                <td>↓</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- MOT体验 -->
+    <div class="card" style="margin-top:20px;">
+        <div class="card-title">用户正向体验（MOT）</div>
+
+        <table class="table">
+            <tr>
+                <th>体验点</th>
+                <th>占比</th>
+            </tr>
+            <tr>
+                <td>稳固性好</td>
+                <td>35%</td>
+            </tr>
+            <tr>
+                <td>外观设计</td>
+                <td>28%</td>
+            </tr>
+            <tr>
+                <td>升降顺滑</td>
+                <td>22%</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 竞品对比 -->
+    <div class="card" style="margin-top:20px;">
+        <div class="card-title">竞品评分对比</div>
+
+        <table class="table">
+            <tr>
+                <th>品牌</th>
+                <th>评分</th>
+            </tr>
+            <tr>
+                <td>Vernal</td>
+                <td class="highlight">4.3</td>
+            </tr>
+            <tr>
+                <td>Flexispot</td>
+                <td>4.5</td>
+            </tr>
+            <tr>
+                <td>Autonomous</td>
+                <td>4.4</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<script>
+    function goHome() {
+        window.location.href = "index.html";
+    }
+</script>
+
+</body>
+</html>
