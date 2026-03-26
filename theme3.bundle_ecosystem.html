@@ -136,14 +136,14 @@ th,td{padding:10px;border-bottom:1px solid #eee}
 <div class="grid">
 
 <div class="card">
-<h3>一、搭售率</h3>
-<div class="desc">识别最容易带出的配件</div>
+<h3>一、主销品视角：搭售率</h3>
+<div class="desc">目的：识别该主销品最容易带出的配件。看法：高搭售率配件可作为页面默认推荐，高销量但低搭售率的配件则提示推荐策略可能不足。</div>
 <div id="c1" class="chart"></div>
 </div>
 
 <div class="card">
-<h3>二、搭售金额</h3>
-<div class="desc">识别高价值配件</div>
+<h3>二、主销品视角：不同配件的搭售金额</h3>
+<div class="desc">目的：识别真正带来附加收入的配件。看法：搭售率高不一定高价值，搭售金额高的配件更适合纳入重点组合与Bundle设计。</div>
 <div id="c2" class="chart"></div>
 </div>
 
@@ -153,14 +153,14 @@ th,td{padding:10px;border-bottom:1px solid #eee}
 <div class="grid">
 
 <div class="card">
-<h3>三、国家差异</h3>
-<div class="desc">识别不同站点表现</div>
+<h3>三、主销品视角：主销品在各站点的搭售表现</h3>
+<div class="desc">目的：识别站点差异，反映推荐模块、消费偏好或组合策略的差异。</div>
 <div id="c3" class="chart"></div>
 </div>
 
 <div class="card">
 <h3>四、搭售结构</h3>
-<div class="desc">判断是否依赖搭售</div>
+<div class="desc">目的：判断配件是“搭售驱动型”还是“独立销售型”。看法：搭售占比高的配件更适合作为主销品附属推荐，搭售占比低且总量低的配件可进入低效SKU观察池。</div>
 <div id="c4" class="chart"></div>
 </div>
 
@@ -169,7 +169,7 @@ th,td{padding:10px;border-bottom:1px solid #eee}
 <!-- 5 -->
 <div class="card">
 <h3>五、四象限分析</h3>
-<div class="desc">识别核心 / 潜力 / 低效件</div>
+<div class="desc">目的：综合搭售率与搭售金额，识别核心搭售件、潜力件与低价值配件。看法：右上象限为“高搭售率 + 高金额”的核心件，右下象限为“低搭售率 + 高金额”的潜力件，左下象限为低价值件。</div>
 <div id="c5" class="chart"></div>
 </div>
 
@@ -177,13 +177,14 @@ th,td{padding:10px;border-bottom:1px solid #eee}
 <div class="grid">
 
 <div class="card">
-<h3>六、主销品贡献</h3>
-<div class="desc">配件被哪些主销品带动</div>
+<h3>六、配件视角：所选配件对各主销品的搭售金额分布</h3>
+<div class="desc">目的：反向查看某个配件主要由哪些主销品带动。看法：若配件高度依赖单一主销品，意味着风险集中；若多主销品均有贡献，说明其通用性更强。</div>
 <div id="c6" class="chart"></div>
 </div>
 
 <div class="card">
-<h3>七、SKU清单</h3>
+<h3>七、低效/潜力搭售件识别清单</h3>
+<div class="desc">目的：输出直接可用于业务讨论的清单。看法：高搭售率高金额为“核心件”，高金额低搭售率为“潜力件”，低金额低搭售率为“低效件”，可进入优化或淘汰评估。</div>
 <table id="table"></table>
 </div>
 
@@ -230,14 +231,77 @@ series:[{type:"pie",data:[
 })
 
 // 图5
+const bubbleData = [
+  {name:"小高台", rate:85, revenue:5, volume:1800},
+  {name:"V系列边柜", rate:82, revenue:3.8, volume:1400},
+  {name:"线缆挂件", rate:78, revenue:2.5, volume:900},
+  {name:"键盘托", rate:75, revenue:2.0, volume:700}
+];
+
+// 自动计算气泡大小
+function size(v){
+  return Math.sqrt(v) * 2.5;
+}
+
 echarts.init(c5).setOption({
-tooltip:{formatter:p=>`${p.data[2]}<br>搭售率:${p.data[0]}%<br>金额:${p.data[1]}`},
-xAxis:{name:"搭售率"},yAxis:{name:"金额"},
-series:[{type:"scatter",
-data:acc.map((a,i)=>[rate[i],rev[i],a]),
-label:{show:true,formatter:p=>p.data[2]}
-}]
-})
+
+  tooltip:{
+    formatter: p=>{
+      return `
+      <b>${p.data.name}</b><br>
+      搭售率：${p.data.value[0]}%<br>
+      搭售金额：¥${p.data.value[1]}M<br>
+      搭售销量：${p.data.volume}
+      `;
+    }
+  },
+
+  xAxis:{
+    name:"搭售率",
+    min:0,
+    max:100,
+    axisLabel:{formatter:'{value}%'},
+    splitLine:{lineStyle:{type:'dashed'}}
+  },
+
+  yAxis:{
+    name:"搭售金额",
+    axisLabel:{formatter:'¥{value}M'},
+    splitLine:{lineStyle:{type:'dashed'}}
+  },
+
+  series:[{
+    type:"scatter",
+    data: bubbleData.map(d=>({
+      name:d.name,
+      value:[d.rate, d.revenue],
+      volume:d.volume,
+      symbolSize:size(d.volume)
+    })),
+
+    label:{
+      show:true,
+      formatter:p=>p.data.name,
+      color:"#fff"
+    },
+
+    itemStyle:{
+      color:"#5B7BEA",
+      opacity:0.85
+    }
+  }],
+
+  // ⭐ 四象限分割线
+  markLine:{
+    silent:true,
+    lineStyle:{type:'dashed',color:'#999'},
+    data:[
+      {xAxis:50},
+      {yAxis:3}
+    ]
+  }
+
+});
 
 // 图6
 echarts.init(c6).setOption({
