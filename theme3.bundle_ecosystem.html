@@ -2,17 +2,19 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>Vernal 搭售生态分析看板 Demo</title>
+<title>搭售生态分析 V2</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 
 <style>
-body{margin:0;font-family:-apple-system;background:#f5f7fb;color:#1f2937}
-.header{background:#0f172a;color:#fff;padding:24px}
+body{margin:0;font-family:-apple-system;background:#f5f7fb}
+.header{background:#0f172a;color:#fff;padding:20px}
 .container{max-width:1400px;margin:auto;padding:20px}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:20px}
-.kpi{background:#fff;border-radius:12px;padding:16px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
-.card{background:#fff;border-radius:14px;padding:16px}
+.filters{display:flex;gap:10px;margin-bottom:20px}
+select{padding:8px;border-radius:6px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.kpi{background:#fff;padding:16px;border-radius:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.card{background:#fff;padding:16px;border-radius:12px}
 .chart{height:360px}
 table{width:100%;border-collapse:collapse}
 th,td{padding:10px;border-bottom:1px solid #eee}
@@ -26,15 +28,28 @@ th,td{padding:10px;border-bottom:1px solid #eee}
 <body>
 
 <div class="header">
-<h2>Vernal 搭售生态分析看板 Demo</h2>
+<h2>搭售生态分析 V2（动态版）</h2>
 </div>
 
 <div class="container">
 
+<!-- 筛选 -->
+<div class="filters">
+<select id="product"></select>
+<select id="country">
+<option value="ALL">All</option>
+<option value="US">US</option>
+<option value="CA">CA</option>
+<option value="UK">UK</option>
+<option value="DE">DE</option>
+</select>
+<select id="acc"></select>
+</div>
+
 <!-- KPI -->
 <div class="kpis">
 <div class="kpi"><h2 id="k1"></h2><p>主销品销量</p></div>
-<div class="kpi"><h2 id="k2"></h2><p>整体搭售率</p></div>
+<div class="kpi"><h2 id="k2"></h2><p>搭售率</p></div>
 <div class="kpi"><h2 id="k3"></h2><p>搭售金额</p></div>
 <div class="kpi"><h2 id="k4"></h2><p>搭售单产</p></div>
 </div>
@@ -53,100 +68,115 @@ th,td{padding:10px;border-bottom:1px solid #eee}
 <div id="c5" class="chart" style="height:420px"></div>
 </div>
 
-<!-- 分布 -->
-<div class="grid">
-<div class="card"><h3>配件贡献</h3><div id="c6" class="chart"></div></div>
-
+<!-- 表 -->
 <div class="card">
-<h3>决策清单</h3>
+<h3>SKU决策清单</h3>
 <table>
-<thead>
-<tr><th>配件</th><th>搭售金额</th><th>占比</th><th>标签</th></tr>
-</thead>
+<thead><tr><th>配件</th><th>金额</th><th>搭售率</th><th>标签</th></tr></thead>
 <tbody id="table"></tbody>
 </table>
-</div>
 </div>
 
 </div>
 
 <script>
 
-const acc=["显示器支架","理线槽","抽屉","脚踏板","杯架","隐私挡板"]
+// ===== 数据（模拟真实结构）=====
+const products = ["V0.7一型整桌","V0.7一型老板桌","V0.7L型整桌","V0.7L型老板桌"]
+const accs = ["小高台","V系列边柜","线缆挂件","键盘托"]
 
-const rate=[42,36,28,18,12,6]
-const rev=[5,3.5,2,1.2,0.7,0.3]
+const data = {
+"V0.7一型整桌":{sales:1800,rate:[45,38,25,20],rev:[5,3.8,2.5,2]},
+"V0.7一型老板桌":{sales:1500,rate:[40,32,28,22],rev:[4.5,3.2,2.3,1.8]},
+"V0.7L型整桌":{sales:1400,rate:[42,30,26,19],rev:[4.2,3,2.1,1.5]},
+"V0.7L型老板桌":{sales:1300,rate:[38,29,24,18],rev:[4,2.8,2,1.3]}
+}
+
+// ===== 初始化 =====
+const pSel=document.getElementById("product")
+const aSel=document.getElementById("acc")
+
+products.forEach(p=>{
+let o=document.createElement("option")
+o.value=p;o.textContent=p
+pSel.appendChild(o)
+})
+
+accs.forEach(a=>{
+let o=document.createElement("option")
+o.value=a;o.textContent=a
+aSel.appendChild(o)
+})
+
+// 图
+const c1=echarts.init(document.getElementById("c1"))
+const c2=echarts.init(document.getElementById("c2"))
+const c3=echarts.init(document.getElementById("c3"))
+const c4=echarts.init(document.getElementById("c4"))
+const c5=echarts.init(document.getElementById("c5"))
+
+// ===== 渲染 =====
+function render(){
+let p=pSel.value
+let d=data[p]
 
 // KPI
-document.getElementById("k1").innerText=1820
-document.getElementById("k2").innerText="142%"
-document.getElementById("k3").innerText="¥12.7M"
-document.getElementById("k4").innerText="¥6978"
+let totalRate = d.rate.reduce((a,b)=>a+b)/d.rate.length
+let totalRev = d.rev.reduce((a,b)=>a+b)
+
+document.getElementById("k1").innerText=d.sales
+document.getElementById("k2").innerText=totalRate.toFixed(1)+"%"
+document.getElementById("k3").innerText="¥"+totalRev.toFixed(1)+"M"
+document.getElementById("k4").innerText="¥"+Math.round(totalRev*1000000/d.sales)
 
 // 图1
-echarts.init(c1).setOption({
-xAxis:{data:acc},yAxis:{},
-series:[{type:'line',data:rate}]
-})
+c1.setOption({xAxis:{data:accs},yAxis:{},series:[{type:"line",data:d.rate}]})
 
 // 图2
-echarts.init(c2).setOption({
-xAxis:{data:acc},yAxis:{},
-series:[{type:'bar',data:rev}]
-})
+c2.setOption({xAxis:{data:accs},yAxis:{},series:[{type:"bar",data:d.rev}]})
 
-// 图3
-echarts.init(c3).setOption({
-xAxis:{data:["US","CA","UK","DE"]},
-yAxis:{},
-series:[{type:'bar',data:[31.5,27.3,25.4,29.8]}]
-})
+// 国家（模拟）
+c3.setOption({xAxis:{data:["US","CA","UK","DE"]},yAxis:{},
+series:[{type:"bar",data:[30,25,22,28]}]})
 
-// 图4
-echarts.init(c4).setOption({
-series:[{type:'pie',data:[
-{value:86,name:"搭售"},
-{value:14,name:"单买"}
+// 结构
+c4.setOption({
+series:[{type:"pie",data:[
+{value:80,name:"搭售"},
+{value:20,name:"单买"}
 ]}]
 })
 
 // 四象限
-echarts.init(c5).setOption({
-xAxis:{name:"搭售占比"},
+c5.setOption({
+xAxis:{name:"搭售率"},
 yAxis:{name:"搭售金额"},
 series:[{
 type:"scatter",
-data:[
-[85,5,"显示器支架"],
-[86,3.5,"理线槽"],
-[85,2,"抽屉"],
-[87,1.2,"脚踏板"]
-],
+data:accs.map((a,i)=>[d.rate[i],d.rev[i],a]),
 label:{show:true,formatter:p=>p.data[2]}
 }]
 })
 
-// 分布
-echarts.init(c6).setOption({
-xAxis:{data:["整桌A","整桌B","整桌C","整桌D"]},
-yAxis:{},
-series:[{type:"bar",data:[5,4.3,5.6,5.2]}]
-})
-
-// 表格
-const rows=acc.map((a,i)=>{
+// 表
+let rows=accs.map((a,i)=>{
 let tag="低效件",cls="red"
-if(rev[i]>2){tag="核心件";cls="green"}
-else if(rev[i]>1){tag="潜力件";cls="yellow"}
+if(d.rev[i]>3){tag="核心件";cls="green"}
+else if(d.rev[i]>2){tag="潜力件";cls="yellow"}
+
 return `<tr>
 <td>${a}</td>
-<td>¥${rev[i]}M</td>
-<td>${rate[i]}%</td>
+<td>¥${d.rev[i]}M</td>
+<td>${d.rate[i]}%</td>
 <td><span class="tag ${cls}">${tag}</span></td>
 </tr>`
 })
 
 document.getElementById("table").innerHTML=rows.join("")
+}
+
+pSel.onchange=render
+render()
 
 </script>
 
