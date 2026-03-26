@@ -9,15 +9,54 @@
 body{margin:0;font-family:-apple-system;background:#f5f7fb}
 .header{background:#0f172a;color:#fff;padding:20px}
 .container{max-width:1400px;margin:auto;padding:20px}
-.filters{display:flex;gap:10px;margin-bottom:20px}
-select{padding:8px;border-radius:6px}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.kpi{background:#fff;padding:16px;border-radius:12px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
-.card{background:#fff;padding:16px;border-radius:12px}
+
+/* ⭐ 筛选器优化 */
+.filters{
+display:flex;
+gap:15px;
+margin-bottom:25px;
+}
+select{
+padding:10px 12px;
+border-radius:10px;
+border:1px solid #dbe3ef;
+background:#fff;
+font-size:14px;
+}
+
+/* KPI */
+.kpis{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+margin-bottom:20px;
+}
+.kpi{
+background:#fff;
+padding:18px;
+border-radius:12px;
+}
+
+/* 布局 */
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
+margin-bottom:20px;
+}
+
+.card{
+background:#fff;
+padding:16px;
+border-radius:12px;
+}
+
 .chart{height:360px}
+
+/* 表格 */
 table{width:100%;border-collapse:collapse}
 th,td{padding:10px;border-bottom:1px solid #eee}
+
 .tag{padding:4px 10px;border-radius:20px;font-size:12px}
 .green{background:#e8f7ee;color:#117a37}
 .yellow{background:#fff6df;color:#9a6700}
@@ -28,20 +67,20 @@ th,td{padding:10px;border-bottom:1px solid #eee}
 <body>
 
 <div class="header">
-<h2>搭售生态分析 V2（动态版）</h2>
+<h2>搭售生态分析 V2</h2>
 </div>
 
 <div class="container">
 
-<!-- 筛选 -->
+<!-- ✅ 筛选器 -->
 <div class="filters">
 <select id="product"></select>
 <select id="country">
-<option value="ALL">All</option>
-<option value="US">US</option>
-<option value="CA">CA</option>
-<option value="UK">UK</option>
-<option value="DE">DE</option>
+<option value="ALL">全部国家</option>
+<option>US</option>
+<option>CA</option>
+<option>UK</option>
+<option>DE</option>
 </select>
 <select id="acc"></select>
 </div>
@@ -81,18 +120,18 @@ th,td{padding:10px;border-bottom:1px solid #eee}
 
 <script>
 
-// ===== 数据（模拟真实结构）=====
-const products = ["V0.7一型整桌","V0.7一型老板桌","V0.7L型整桌","V0.7L型老板桌"]
-const accs = ["小高台","V系列边柜","线缆挂件","键盘托"]
+// 数据
+const products=["V0.7一型整桌","V0.7一型老板桌","V0.7L型整桌","V0.7L型老板桌"]
+const accs=["小高台","V系列边柜","线缆挂件","键盘托"]
 
-const data = {
+const data={
 "V0.7一型整桌":{sales:1800,rate:[45,38,25,20],rev:[5,3.8,2.5,2]},
 "V0.7一型老板桌":{sales:1500,rate:[40,32,28,22],rev:[4.5,3.2,2.3,1.8]},
 "V0.7L型整桌":{sales:1400,rate:[42,30,26,19],rev:[4.2,3,2.1,1.5]},
 "V0.7L型老板桌":{sales:1300,rate:[38,29,24,18],rev:[4,2.8,2,1.3]}
 }
 
-// ===== 初始化 =====
+// 初始化
 const pSel=document.getElementById("product")
 const aSel=document.getElementById("acc")
 
@@ -115,40 +154,53 @@ const c3=echarts.init(document.getElementById("c3"))
 const c4=echarts.init(document.getElementById("c4"))
 const c5=echarts.init(document.getElementById("c5"))
 
-// ===== 渲染 =====
 function render(){
-let p=pSel.value
-let d=data[p]
+
+let d=data[pSel.value]
 
 // KPI
-let totalRate = d.rate.reduce((a,b)=>a+b)/d.rate.length
-let totalRev = d.rev.reduce((a,b)=>a+b)
+let rateAvg=d.rate.reduce((a,b)=>a+b)/d.rate.length
+let revSum=d.rev.reduce((a,b)=>a+b)
 
-document.getElementById("k1").innerText=d.sales
-document.getElementById("k2").innerText=totalRate.toFixed(1)+"%"
-document.getElementById("k3").innerText="¥"+totalRev.toFixed(1)+"M"
-document.getElementById("k4").innerText="¥"+Math.round(totalRev*1000000/d.sales)
+k1.innerText=d.sales
+k2.innerText=rateAvg.toFixed(1)+"%"
+k3.innerText="¥"+revSum.toFixed(1)+"M"
+k4.innerText="¥"+Math.round(revSum*1000000/d.sales)
 
-// 图1
-c1.setOption({xAxis:{data:accs},yAxis:{},series:[{type:"line",data:d.rate}]})
+// ⭐ tooltip全部加上
+c1.setOption({
+tooltip:{trigger:"axis"},
+xAxis:{data:accs},
+yAxis:{},
+series:[{type:"line",data:d.rate}]
+})
 
-// 图2
-c2.setOption({xAxis:{data:accs},yAxis:{},series:[{type:"bar",data:d.rev}]})
+c2.setOption({
+tooltip:{trigger:"axis"},
+xAxis:{data:accs},
+yAxis:{},
+series:[{type:"bar",data:d.rev}]
+})
 
-// 国家（模拟）
-c3.setOption({xAxis:{data:["US","CA","UK","DE"]},yAxis:{},
-series:[{type:"bar",data:[30,25,22,28]}]})
+c3.setOption({
+tooltip:{trigger:"axis"},
+xAxis:{data:["US","CA","UK","DE"]},
+yAxis:{},
+series:[{type:"bar",data:[30,25,22,28]}]
+})
 
-// 结构
 c4.setOption({
+tooltip:{trigger:"item"},
 series:[{type:"pie",data:[
 {value:80,name:"搭售"},
 {value:20,name:"单买"}
 ]}]
 })
 
-// 四象限
 c5.setOption({
+tooltip:{
+formatter:p=>`${p.data[2]}<br>搭售率:${p.data[0]}%<br>金额:${p.data[1]}M`
+},
 xAxis:{name:"搭售率"},
 yAxis:{name:"搭售金额"},
 series:[{
@@ -159,7 +211,7 @@ label:{show:true,formatter:p=>p.data[2]}
 })
 
 // 表
-let rows=accs.map((a,i)=>{
+table.innerHTML=accs.map((a,i)=>{
 let tag="低效件",cls="red"
 if(d.rev[i]>3){tag="核心件";cls="green"}
 else if(d.rev[i]>2){tag="潜力件";cls="yellow"}
@@ -170,9 +222,7 @@ return `<tr>
 <td>${d.rate[i]}%</td>
 <td><span class="tag ${cls}">${tag}</span></td>
 </tr>`
-})
-
-document.getElementById("table").innerHTML=rows.join("")
+}).join("")
 }
 
 pSel.onchange=render
