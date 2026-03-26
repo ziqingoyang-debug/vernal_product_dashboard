@@ -192,7 +192,7 @@ th,td{padding:10px;border-bottom:1px solid #eee}
 <th>搭售销量</th>
 <th>搭售金额</th>
 <th>搭售占比</th>
-<th>平均毛利率</th>
+<th>产品定价毛利率</th>
 <th>标签</th>
 </tr>
 </thead>
@@ -324,10 +324,10 @@ series:[{type:"bar",data:[5,4.3,5.6,5.2]}]
 })
 
 // 表
-const sales = [2624, 2121, 1659, 1144];       // 搭售销量
-const revenue = [20.1, 13.7, 7.9, 4.9];       // 搭售金额
-const rate2 = [85.9, 86.3, 85.2, 87.1];        // 搭售占比
-const margin = [61.2, 58.5, 55.5, 50];        // 毛利率
+const sales = [1800, 1400, 900, 700];       // 搭售销量
+const revenue = [5, 3.8, 2.5, 2];       // 搭售金额
+const rate2 = [80.0, 86.3, 85.2, 87.1];        // 搭售占比
+const margin = [61.2, 58.5, 55.5, 50];        // 产品定价毛利率
 
 table.innerHTML = acc.map((a,i)=>{
 
