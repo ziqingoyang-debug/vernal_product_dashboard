@@ -185,7 +185,19 @@ th,td{padding:10px;border-bottom:1px solid #eee}
 <div class="card">
 <h3>七、低效/潜力搭售件识别清单</h3>
 <div class="desc">目的：输出直接可用于业务讨论的清单。看法：高搭售率高金额为“核心件”，高金额低搭售率为“潜力件”，低金额低搭售率为“低效件”，可进入优化或淘汰评估。</div>
-<table id="table"></table>
+<table>
+<thead>
+<tr>
+<th>配件</th>
+<th>搭售销量</th>
+<th>搭售金额</th>
+<th>搭售占比</th>
+<th>平均毛利率</th>
+<th>标签</th>
+</tr>
+</thead>
+<tbody id="table"></tbody>
+</table>
 </div>
 
 </div>
@@ -312,10 +324,34 @@ series:[{type:"bar",data:[5,4.3,5.6,5.2]}]
 })
 
 // 表
-table.innerHTML=acc.map((a,i)=>{
+const sales = [2624, 2121, 1659, 1144];       // 搭售销量
+const revenue = [20.1, 13.7, 7.9, 4.9];       // 搭售金额
+const rate = [85.9, 86.3, 85.2, 87.1];        // 搭售占比
+const margin = [61.2, 58.5, 55.5, 50];        // 毛利率
+
+table.innerHTML = acc.map((a,i)=>{
+
 let tag="低效件",cls="red"
-if(rev[i]>3){tag="核心件";cls="green"}
-else if(rev[i]>2){tag="潜力件";cls="yellow"}
+
+// 分类逻辑（你业务那套）
+if(rate[i]>80 && revenue[i]>5){
+  tag="核心件"; cls="green"
+}
+else if(rate[i]<80 && revenue[i]>5){
+  tag="潜力件"; cls="yellow"
+}
+
+return `
+<tr>
+<td>${a}</td>
+<td>${sales[i]}</td>
+<td>¥${revenue[i]}M</td>
+<td>${rate[i]}%</td>
+<td>${margin[i]}%</td>
+<td><span class="tag ${cls}">${tag}</span></td>
+</tr>
+`
+}).join("")
 
 return `<tr>
 <td>${a}</td>
