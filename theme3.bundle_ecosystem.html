@@ -2,32 +2,28 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>搭售生态分析 V2</title>
+<title>搭售生态分析</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 
 <style>
-body{margin:0;font-family:-apple-system;background:#f5f7fb}
-.header{background:#0f172a;color:#fff;padding:20px}
+body{margin:0;font-family:-apple-system;background:#f5f7fb;color:#1f2937}
+.header{background:#0f172a;color:#fff;padding:24px}
 .container{max-width:1400px;margin:auto;padding:20px}
 
-/* ⭐ 筛选器优化 */
-.filters{
-display:flex;
-gap:15px;
-margin-bottom:25px;
-}
-select{
-padding:10px 12px;
-border-radius:10px;
-border:1px solid #dbe3ef;
+/* 核心口径说明 */
+.tip{
 background:#fff;
-font-size:14px;
+padding:16px;
+border-radius:10px;
+margin-bottom:20px;
+color:#475467;
+line-height:1.7;
 }
 
 /* KPI */
 .kpis{
 display:grid;
-grid-template-columns:repeat(4,1fr);
+grid-template-columns:repeat(3,1fr);
 gap:12px;
 margin-bottom:20px;
 }
@@ -36,8 +32,14 @@ background:#fff;
 padding:18px;
 border-radius:12px;
 }
+.kpi p{
+font-size:13px;
+color:#667085;
+line-height:1.6;
+margin-top:8px;
+}
 
-/* 布局 */
+/* 图表 */
 .grid{
 display:grid;
 grid-template-columns:1fr 1fr;
@@ -51,69 +53,91 @@ padding:16px;
 border-radius:12px;
 }
 
+.desc{
+font-size:13px;
+color:#667085;
+line-height:1.7;
+margin-bottom:10px;
+}
+
 .chart{height:360px}
-
-/* 表格 */
-table{width:100%;border-collapse:collapse}
-th,td{padding:10px;border-bottom:1px solid #eee}
-
-.tag{padding:4px 10px;border-radius:20px;font-size:12px}
-.green{background:#e8f7ee;color:#117a37}
-.yellow{background:#fff6df;color:#9a6700}
-.red{background:#fdecec;color:#b42318}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-<h2>搭售生态分析 V2</h2>
+<h2>Vernal 搭售生态分析看板</h2>
 </div>
 
 <div class="container">
 
-<!-- ✅ 筛选器 -->
-<div class="filters">
-<select id="product"></select>
-<select id="country">
-<option value="ALL">全部国家</option>
-<option>US</option>
-<option>CA</option>
-<option>UK</option>
-<option>DE</option>
-</select>
-<select id="acc"></select>
+<!-- 核心口径 -->
+<div class="tip">
+搭售率 = 搭售销量 / 主销品销量；搭售金额 = 搭售行为产生的配件收入。
+用于判断主销品带货能力及配件收入贡献。
 </div>
 
 <!-- KPI -->
 <div class="kpis">
-<div class="kpi"><h2 id="k1"></h2><p>主销品销量</p></div>
-<div class="kpi"><h2 id="k2"></h2><p>搭售率</p></div>
-<div class="kpi"><h2 id="k3"></h2><p>搭售金额</p></div>
-<div class="kpi"><h2 id="k4"></h2><p>搭售单产</p></div>
+
+<div class="kpi">
+<h2>1820</h2>
+<b>主销品销量</b>
+<p>用于衡量主销品流量入口规模。销量高但搭售率低，通常意味着搭售能力未被充分释放。</p>
+</div>
+
+<div class="kpi">
+<h2>42%</h2>
+<b>整体搭售率</b>
+<p>反映主销品带出配件的能力。值越高，说明该主销品越能形成完整组合销售。</p>
+</div>
+
+<div class="kpi">
+<h2>¥12.7M</h2>
+<b>搭售金额</b>
+<p>仅统计搭售行为产生的配件收入，用于衡量搭售对收入贡献的大小。</p>
+</div>
+
 </div>
 
 <!-- 图 -->
 <div class="grid">
-<div class="card"><h3>搭售率</h3><div id="c1" class="chart"></div></div>
-<div class="card"><h3>搭售金额</h3><div id="c2" class="chart"></div></div>
-<div class="card"><h3>国家差异</h3><div id="c3" class="chart"></div></div>
-<div class="card"><h3>结构</h3><div id="c4" class="chart"></div></div>
+
+<div class="card">
+<h3>一、主销品视角：不同配件的搭售率</h3>
+<div class="desc">
+目的：识别最容易被带出的配件  
+看法：高搭售率配件适合作为默认推荐，低搭售率说明推荐策略可能不足
+</div>
+<div id="c1" class="chart"></div>
 </div>
 
-<!-- 四象限 -->
 <div class="card">
-<h3>四象限分析</h3>
-<div id="c5" class="chart" style="height:420px"></div>
+<h3>二、主销品视角：不同配件的搭售金额</h3>
+<div class="desc">
+目的：识别真正贡献收入的配件  
+看法：搭售率高不一定高价值，应优先关注高金额配件
+</div>
+<div id="c2" class="chart"></div>
 </div>
 
-<!-- 表 -->
 <div class="card">
-<h3>SKU决策清单</h3>
-<table>
-<thead><tr><th>配件</th><th>金额</th><th>搭售率</th><th>标签</th></tr></thead>
-<tbody id="table"></tbody>
-</table>
+<h3>三、主销品视角：国家差异</h3>
+<div class="desc">
+目的：识别不同站点的搭售能力差异  
+看法：差异通常来自用户习惯或推荐策略不同
+</div>
+<div id="c3" class="chart"></div>
+</div>
+
+<div class="card">
+<h3>四、配件视角：结构分析</h3>
+<div class="desc">
+目的：判断配件是否依赖搭售  
+看法：搭售占比高说明依赖主销品驱动
+</div>
+<div id="c4" class="chart"></div>
 </div>
 
 </div>
@@ -121,112 +145,40 @@ th,td{padding:10px;border-bottom:1px solid #eee}
 <script>
 
 // 数据
-const products=["V0.7一型整桌","V0.7一型老板桌","V0.7L型整桌","V0.7L型老板桌"]
-const accs=["小高台","V系列边柜","线缆挂件","键盘托"]
+const acc=["小高台","V系列边柜","线缆挂件","键盘托"]
 
-const data={
-"V0.7一型整桌":{sales:1800,rate:[45,38,25,20],rev:[5,3.8,2.5,2]},
-"V0.7一型老板桌":{sales:1500,rate:[40,32,28,22],rev:[4.5,3.2,2.3,1.8]},
-"V0.7L型整桌":{sales:1400,rate:[42,30,26,19],rev:[4.2,3,2.1,1.5]},
-"V0.7L型老板桌":{sales:1300,rate:[38,29,24,18],rev:[4,2.8,2,1.3]}
-}
-
-// 初始化
-const pSel=document.getElementById("product")
-const aSel=document.getElementById("acc")
-
-products.forEach(p=>{
-let o=document.createElement("option")
-o.value=p;o.textContent=p
-pSel.appendChild(o)
-})
-
-accs.forEach(a=>{
-let o=document.createElement("option")
-o.value=a;o.textContent=a
-aSel.appendChild(o)
-})
-
-// 图
-const c1=echarts.init(document.getElementById("c1"))
-const c2=echarts.init(document.getElementById("c2"))
-const c3=echarts.init(document.getElementById("c3"))
-const c4=echarts.init(document.getElementById("c4"))
-const c5=echarts.init(document.getElementById("c5"))
-
-function render(){
-
-let d=data[pSel.value]
-
-// KPI
-let rateAvg=d.rate.reduce((a,b)=>a+b)/d.rate.length
-let revSum=d.rev.reduce((a,b)=>a+b)
-
-k1.innerText=d.sales
-k2.innerText=rateAvg.toFixed(1)+"%"
-k3.innerText="¥"+revSum.toFixed(1)+"M"
-k4.innerText="¥"+Math.round(revSum*1000000/d.sales)
-
-// ⭐ tooltip全部加上
-c1.setOption({
+// 图1
+echarts.init(c1).setOption({
 tooltip:{trigger:"axis"},
-xAxis:{data:accs},
+xAxis:{data:acc},
 yAxis:{},
-series:[{type:"line",data:d.rate}]
+series:[{type:"line",data:[45,38,25,20]}]
 })
 
-c2.setOption({
+// 图2
+echarts.init(c2).setOption({
 tooltip:{trigger:"axis"},
-xAxis:{data:accs},
+xAxis:{data:acc},
 yAxis:{},
-series:[{type:"bar",data:d.rev}]
+series:[{type:"bar",data:[5,3.8,2.5,2]}]
 })
 
-c3.setOption({
+// 图3
+echarts.init(c3).setOption({
 tooltip:{trigger:"axis"},
 xAxis:{data:["US","CA","UK","DE"]},
 yAxis:{},
 series:[{type:"bar",data:[30,25,22,28]}]
 })
 
-c4.setOption({
+// 图4
+echarts.init(c4).setOption({
 tooltip:{trigger:"item"},
 series:[{type:"pie",data:[
 {value:80,name:"搭售"},
 {value:20,name:"单买"}
 ]}]
 })
-
-c5.setOption({
-tooltip:{
-formatter:p=>`${p.data[2]}<br>搭售率:${p.data[0]}%<br>金额:${p.data[1]}M`
-},
-xAxis:{name:"搭售率"},
-yAxis:{name:"搭售金额"},
-series:[{
-type:"scatter",
-data:accs.map((a,i)=>[d.rate[i],d.rev[i],a]),
-label:{show:true,formatter:p=>p.data[2]}
-}]
-})
-
-// 表
-table.innerHTML=accs.map((a,i)=>{
-let tag="低效件",cls="red"
-if(d.rev[i]>3){tag="核心件";cls="green"}
-else if(d.rev[i]>2){tag="潜力件";cls="yellow"}
-
-return `<tr>
-<td>${a}</td>
-<td>¥${d.rev[i]}M</td>
-<td>${d.rate[i]}%</td>
-<td><span class="tag ${cls}">${tag}</span></td>
-</tr>`
-}).join("")
-}
-
-pSel.onchange=render
-render()
 
 </script>
 
