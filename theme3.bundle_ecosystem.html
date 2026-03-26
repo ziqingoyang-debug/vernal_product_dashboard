@@ -1,0 +1,652 @@
+from pathlib import Path
+import json
+
+out = Path("/mnt/data/bundle_ecosystem_dashboard_demo.html")
+
+main_products = ["V0.7一型整桌", "V0.7L型整桌", "V0.7一型行政桌", "V0.7L型行政桌"]
+accessories = ["显示器支架", "理线槽", "抽屉", "脚踏板", "杯架", "隐私挡板"]
+
+data = {
+    "V0.7一型整桌": {
+        "main_sales": 1820,
+        "attach_rate": [42, 36, 28, 18, 12, 6],
+        "attach_qty": [764, 655, 510, 328, 218, 109],
+        "attach_revenue": [5.0, 3.5, 2.0, 1.2, 0.7, 0.3],
+        "attach_margin": [61, 58, 55, 49, 46, 38],
+        "solo_qty": [120, 86, 74, 42, 65, 18],
+        "countries": {
+            "US": {"main_sales": 920, "attach_rate": 31.5, "attach_revenue": 5.1, "attach_single_prod": 55.4},
+            "CA": {"main_sales": 310, "attach_rate": 27.3, "attach_revenue": 1.4, "attach_single_prod": 45.2},
+            "UK": {"main_sales": 260, "attach_rate": 25.4, "attach_revenue": 1.1, "attach_single_prod": 42.3},
+            "DE": {"main_sales": 330, "attach_rate": 29.8, "attach_revenue": 1.6, "attach_single_prod": 48.5},
+        }
+    },
+    "V0.7L型整桌": {
+        "main_sales": 1460,
+        "attach_rate": [38, 31, 24, 20, 14, 4],
+        "attach_qty": [555, 453, 350, 292, 204, 58],
+        "attach_revenue": [4.3, 3.1, 1.8, 1.4, 0.8, 0.2],
+        "attach_margin": [59, 57, 54, 50, 45, 35],
+        "solo_qty": [110, 79, 68, 56, 61, 15],
+        "countries": {
+            "US": {"main_sales": 710, "attach_rate": 28.6, "attach_revenue": 4.0, "attach_single_prod": 56.3},
+            "CA": {"main_sales": 220, "attach_rate": 24.1, "attach_revenue": 1.1, "attach_single_prod": 50.0},
+            "UK": {"main_sales": 240, "attach_rate": 22.8, "attach_revenue": 0.9, "attach_single_prod": 37.5},
+            "DE": {"main_sales": 290, "attach_rate": 27.4, "attach_revenue": 1.3, "attach_single_prod": 44.8},
+        }
+    },
+    "V0.7一型行政桌": {
+        "main_sales": 1680,
+        "attach_rate": [45, 34, 26, 16, 10, 5],
+        "attach_qty": [756, 571, 437, 269, 168, 84],
+        "attach_revenue": [5.6, 3.7, 2.1, 1.0, 0.5, 0.25],
+        "attach_margin": [63, 60, 57, 51, 44, 39],
+        "solo_qty": [95, 82, 70, 33, 52, 11],
+        "countries": {
+            "US": {"main_sales": 860, "attach_rate": 32.9, "attach_revenue": 5.2, "attach_single_prod": 60.5},
+            "CA": {"main_sales": 260, "attach_rate": 26.7, "attach_revenue": 1.3, "attach_single_prod": 50.0},
+            "UK": {"main_sales": 220, "attach_rate": 23.0, "attach_revenue": 0.8, "attach_single_prod": 36.4},
+            "DE": {"main_sales": 340, "attach_rate": 28.9, "attach_revenue": 1.9, "attach_single_prod": 55.9},
+        }
+    },
+    "V0.7L型行政桌": {
+        "main_sales": 1340,
+        "attach_rate": [41, 33, 27, 19, 11, 5],
+        "attach_qty": [549, 442, 362, 255, 147, 67],
+        "attach_revenue": [5.2, 3.4, 2.0, 1.3, 0.6, 0.21],
+        "attach_margin": [62, 59, 56, 50, 43, 36],
+        "solo_qty": [104, 90, 76, 39, 58, 12],
+        "countries": {
+            "US": {"main_sales": 640, "attach_rate": 31.2, "attach_revenue": 4.3, "attach_single_prod": 67.2},
+            "CA": {"main_sales": 210, "attach_rate": 25.9, "attach_revenue": 1.0, "attach_single_prod": 47.6},
+            "UK": {"main_sales": 180, "attach_rate": 22.1, "attach_revenue": 0.7, "attach_single_prod": 38.9},
+            "DE": {"main_sales": 310, "attach_rate": 27.7, "attach_revenue": 1.5, "attach_single_prod": 48.4},
+        }
+    }
+}
+
+acc_view = {}
+for idx, acc in enumerate(accessories):
+    attach_qty = sum(data[p]["attach_qty"][idx] for p in main_products)
+    attach_rev = round(sum(data[p]["attach_revenue"][idx] for p in main_products), 2)
+    solo_qty = sum(data[p]["solo_qty"][idx] for p in main_products)
+    total_qty = attach_qty + solo_qty
+    attach_share = round(attach_qty / total_qty * 100, 1) if total_qty else 0
+    avg_margin = round(sum(data[p]["attach_margin"][idx] for p in main_products) / len(main_products), 1)
+    pair = {p: data[p]["attach_revenue"][idx] for p in main_products}
+    acc_view[acc] = {
+        "attach_qty": attach_qty,
+        "attach_revenue": attach_rev,
+        "solo_qty": solo_qty,
+        "attach_share": attach_share,
+        "avg_margin": avg_margin,
+        "pair_revenue": pair
+    }
+
+html = """<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vernal 搭售生态分析看板 Demo</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f5f7fb;
+    color: #1f2937;
+  }
+  .header {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+    padding: 28px 32px 20px;
+  }
+  .header h1 { margin: 0 0 10px; font-size: 30px; }
+  .header p { margin: 0; line-height: 1.7; color: rgba(255,255,255,.84); max-width: 1200px; }
+  .container { max-width: 1600px; margin: 0 auto; padding: 20px; }
+  .filters {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .filter-card, .card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .06);
+  }
+  .filter-card { padding: 14px 16px; }
+  label { display:block; font-size: 13px; color:#64748b; margin-bottom: 8px; }
+  select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #dbe3ef;
+    border-radius: 10px;
+    font-size: 14px;
+    background: #fff;
+  }
+  .module-title {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 18px 0 8px;
+  }
+  .module-desc {
+    color: #667085;
+    line-height: 1.75;
+    margin-bottom: 10px;
+  }
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 16px 0 20px;
+  }
+  .kpi {
+    padding: 18px 18px 14px;
+  }
+  .kpi .name { color:#667085; font-size: 14px; margin-bottom: 8px; }
+  .kpi .value { font-size: 34px; font-weight: 800; margin-bottom: 10px; }
+  .kpi .sub { color:#667085; line-height: 1.7; font-size: 13px; }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+  .grid-1 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+  .card {
+    padding: 18px;
+  }
+  .card h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+  }
+  .card .purpose {
+    color:#667085;
+    line-height: 1.7;
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  .chart { width: 100%; height: 360px; }
+  .table-wrap { overflow:auto; }
+  table {
+    width:100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  th, td {
+    padding: 11px 10px;
+    border-bottom: 1px solid #edf2f7;
+    text-align: left;
+    white-space: nowrap;
+  }
+  th { color: #667085; background: #fafbfc; position: sticky; top: 0; }
+  .tag {
+    display:inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .tag-green { background:#e8f7ee; color:#117a37; }
+  .tag-yellow { background:#fff6df; color:#9a6700; }
+  .tag-red { background:#fdecec; color:#b42318; }
+  .tip-box {
+    background:#f8fafc;
+    border:1px solid #e6edf5;
+    border-radius:12px;
+    padding:14px 16px;
+    color:#475467;
+    line-height:1.75;
+    margin-bottom:18px;
+    font-size:14px;
+  }
+  @media (max-width: 1100px) {
+    .filters, .kpis, .grid-2 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>Vernal 搭售生态分析看板 Demo</h1>
+    <p>
+      该模块围绕“主销品带货能力”和“配件被带效率”双视角展开。核心分析目的是识别高价值搭配、低效配件以及具备优化空间的主销品，
+      用于支撑产品组合设计、页面推荐策略优化与SKU结构治理。页面采用虚拟数据演示，可直接部署至 GitHub Pages。
+    </p>
+  </div>
+
+  <div class="container">
+    <div class="filters">
+      <div class="filter-card">
+        <label>国家 / 站点</label>
+        <select id="countrySelect">
+          <option value="ALL">All</option>
+          <option value="US">US</option>
+          <option value="CA">CA</option>
+          <option value="UK">UK</option>
+          <option value="DE">DE</option>
+        </select>
+      </div>
+      <div class="filter-card">
+        <label>主销品</label>
+        <select id="mainProductSelect"></select>
+      </div>
+      <div class="filter-card">
+        <label>配件</label>
+        <select id="accessorySelect"></select>
+      </div>
+      <div class="filter-card">
+        <label>观察周期</label>
+        <select>
+          <option>近12个月</option>
+          <option>近6个月</option>
+          <option>本年累计</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="module-title">搭售生态分析</div>
+    <div class="module-desc">
+      从主销品视角，重点评估“每卖出一个主销品，能带出多少配件、带来多少附加收入”；从配件视角，重点评估“该配件有多少销量来自搭售，以及对哪些主销品贡献更大”。
+      模块输出既服务于页面搭售推荐、组合设计，也服务于低效配件识别与SKU结构优化。
+    </div>
+
+    <div class="tip-box">
+      <b>核心口径：</b>
+      搭售率 = 搭售销量 / 主销品销量；搭售金额 = 搭售行为产生的配件销售收入；搭售单产 = 搭售金额 / 主销品销量。
+      搭售件视角同步区分“搭售销量”和“单独销量”，用于判断该配件是依赖搭售驱动，还是具备独立销售能力。
+    </div>
+
+    <div class="kpis">
+      <div class="card kpi">
+        <div class="name">主销品销量</div>
+        <div class="value" id="kpiMainSales">-</div>
+        <div class="sub">用于衡量主销品流量入口规模。销量高但搭售率低，通常意味着搭售能力未被充分释放。</div>
+      </div>
+      <div class="card kpi">
+        <div class="name">整体搭售率</div>
+        <div class="value" id="kpiAttachRate">-</div>
+        <div class="sub">反映主销品带出配件的能力。值越高，说明该主销品越能形成完整的组合销售。</div>
+      </div>
+      <div class="card kpi">
+        <div class="name">搭售金额</div>
+        <div class="value" id="kpiAttachRevenue">-</div>
+        <div class="sub">仅统计搭售行为下产生的配件收入，用于判断搭售对收入贡献的大小。</div>
+      </div>
+      <div class="card kpi">
+        <div class="name">搭售单产</div>
+        <div class="value" id="kpiAttachProd">-</div>
+        <div class="sub">搭售单产 = 搭售金额 / 主销品销量。用于衡量单件主销品带来的附加价值。</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>一、主销品视角：不同配件的搭售率</h3>
+        <div class="purpose">
+          目的：识别该主销品最容易带出的配件。看法：高搭售率配件可作为页面默认推荐，高销量但低搭售率的配件则提示推荐策略可能不足。
+        </div>
+        <div id="mainRateChart" class="chart"></div>
+      </div>
+      <div class="card">
+        <h3>二、主销品视角：不同配件的搭售金额</h3>
+        <div class="purpose">
+          目的：识别真正带来附加收入的配件。看法：搭售率高不一定高价值，搭售金额高的配件更适合纳入重点组合与Bundle设计。
+        </div>
+        <div id="mainRevenueChart" class="chart"></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>三、主销品视角：主销品在各站点的搭售表现</h3>
+        <div class="purpose">
+          目的：识别站点差异。看法：同一主销品在不同站点的搭售率和搭售单产差异，往往反映推荐模块、消费偏好或组合策略的差异。
+        </div>
+        <div id="countryChart" class="chart"></div>
+      </div>
+      <div class="card">
+        <h3>四、配件视角：搭售 vs 单独销售结构</h3>
+        <div class="purpose">
+          目的：判断配件是“搭售驱动型”还是“独立销售型”。看法：搭售占比高的配件更适合作为主销品附属推荐，搭售占比低且总量低的配件可进入低效SKU观察池。
+        </div>
+        <div id="accStructureChart" class="chart"></div>
+      </div>
+    </div>
+
+    <div class="grid-1">
+      <div class="card">
+        <h3>五、配件视角：主销品 × 配件 四象限分析</h3>
+        <div class="purpose">
+          目的：综合搭售率与搭售金额，识别核心搭售件、潜力件与低价值配件。看法：右上象限为“高搭售率 + 高金额”的核心件，右下象限为“低搭售率 + 高金额”的潜力件，左下象限为低价值件。
+        </div>
+        <div id="quadrantChart" class="chart" style="height:420px;"></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>六、配件视角：所选配件对各主销品的搭售金额分布</h3>
+        <div class="purpose">
+          目的：反向查看某个配件主要由哪些主销品带动。看法：若配件高度依赖单一主销品，意味着风险集中；若多主销品均有贡献，说明其通用性更强。
+        </div>
+        <div id="pairRevenueChart" class="chart"></div>
+      </div>
+      <div class="card">
+        <h3>七、低效/潜力搭售件识别清单</h3>
+        <div class="purpose">
+          目的：输出直接可用于业务讨论的清单。看法：高搭售率高金额为“核心件”，高金额低搭售率为“潜力件”，低金额低搭售率为“低效件”，可进入优化或淘汰评估。
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>配件</th>
+                <th>搭售销量</th>
+                <th>搭售金额</th>
+                <th>搭售占比</th>
+                <th>平均毛利率</th>
+                <th>标签</th>
+              </tr>
+            </thead>
+            <tbody id="accTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+<script>
+const DATA = __DATA__;
+const ACC_VIEW = __ACC_VIEW__;
+const MAIN_PRODUCTS = __MAIN_PRODUCTS__;
+const ACCESSORIES = __ACCESSORIES__;
+
+const mainProductSelect = document.getElementById('mainProductSelect');
+const accessorySelect = document.getElementById('accessorySelect');
+const countrySelect = document.getElementById('countrySelect');
+
+MAIN_PRODUCTS.forEach(v => {
+  const o = document.createElement('option');
+  o.value = v;
+  o.textContent = v;
+  mainProductSelect.appendChild(o);
+});
+ACCESSORIES.forEach(v => {
+  const o = document.createElement('option');
+  o.value = v;
+  o.textContent = v;
+  accessorySelect.appendChild(o);
+});
+mainProductSelect.value = MAIN_PRODUCTS[0];
+accessorySelect.value = ACCESSORIES[0];
+
+const charts = {
+  mainRateChart: echarts.init(document.getElementById('mainRateChart')),
+  mainRevenueChart: echarts.init(document.getElementById('mainRevenueChart')),
+  countryChart: echarts.init(document.getElementById('countryChart')),
+  accStructureChart: echarts.init(document.getElementById('accStructureChart')),
+  quadrantChart: echarts.init(document.getElementById('quadrantChart')),
+  pairRevenueChart: echarts.init(document.getElementById('pairRevenueChart'))
+};
+
+function formatMoney(v) {
+  return '¥' + v.toFixed(2) + 'M';
+}
+
+function calcMainKpis(product, country) {
+  const d = DATA[product];
+  if (country === 'ALL') {
+    const totalRevenue = d.attach_revenue.reduce((a,b) => a+b, 0);
+    const totalQty = d.attach_qty.reduce((a,b) => a+b, 0);
+    return {
+      mainSales: d.main_sales,
+      attachRate: (totalQty / d.main_sales * 100),
+      attachRevenue: totalRevenue,
+      attachProd: totalRevenue / d.main_sales
+    };
+  } else {
+    const c = d.countries[country];
+    return {
+      mainSales: c.main_sales,
+      attachRate: c.attach_rate,
+      attachRevenue: c.attach_revenue,
+      attachProd: c.attach_single_prod / 100
+    };
+  }
+}
+
+function renderKpis(product, country) {
+  const k = calcMainKpis(product, country);
+  document.getElementById('kpiMainSales').textContent = k.mainSales.toLocaleString();
+  document.getElementById('kpiAttachRate').textContent = k.attachRate.toFixed(1) + '%';
+  document.getElementById('kpiAttachRevenue').textContent = formatMoney(k.attachRevenue);
+  document.getElementById('kpiAttachProd').textContent = '¥' + (k.attachProd * 1000000).toFixed(0);
+}
+
+function renderMainCharts(product) {
+  const d = DATA[product];
+
+  charts.mainRateChart.setOption({
+    tooltip: {
+      trigger: 'axis',
+      formatter: params => params[0].axisValue + '<br>' + params[0].marker + '搭售率：' + params[0].data + '%'
+    },
+    xAxis: { type: 'category', data: ACCESSORIES },
+    yAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
+    series: [{
+      type: 'line',
+      smooth: true,
+      data: d.attach_rate,
+      label: { show: true, formatter: '{c}%' }
+    }]
+  });
+
+  charts.mainRevenueChart.setOption({
+    tooltip: {
+      trigger: 'axis',
+      formatter: params => params[0].axisValue + '<br>' + params[0].marker + '搭售金额：' + formatMoney(params[0].data)
+    },
+    xAxis: { type: 'category', data: ACCESSORIES },
+    yAxis: { type: 'value', axisLabel: { formatter: value => '¥' + value + 'M' } },
+    series: [{
+      type: 'bar',
+      data: d.attach_revenue,
+      label: { show: true, formatter: p => '¥' + p.value + 'M' }
+    }]
+  });
+}
+
+function renderCountryChart(product) {
+  const countries = Object.keys(DATA[product].countries);
+  const rate = countries.map(c => DATA[product].countries[c].attach_rate);
+  const prod = countries.map(c => DATA[product].countries[c].attach_single_prod);
+
+  charts.countryChart.setOption({
+    tooltip: {
+      trigger: 'axis',
+      formatter: params => {
+        let s = params[0].axisValue + '<br>';
+        params.forEach(p => {
+          s += p.marker + p.seriesName + '：' + (p.seriesName.indexOf('搭售率') >= 0 ? p.data + '%' : '¥' + p.data) + '<br>';
+        });
+        return s;
+      }
+    },
+    legend: { top: 0 },
+    xAxis: { type: 'category', data: countries },
+    yAxis: [
+      { type: 'value', name: '搭售率', axisLabel: { formatter: '{value}%' } },
+      { type: 'value', name: '搭售单产', axisLabel: { formatter: '¥{value}' } }
+    ],
+    series: [
+      { name: '搭售率', type: 'bar', data: rate, label: { show: true, formatter: '{c}%' } },
+      { name: '搭售单产', type: 'line', yAxisIndex: 1, data: prod, label: { show: true, formatter: '¥{c}' } }
+    ]
+  });
+}
+
+function renderAccessoryStructure(acc) {
+  const d = ACC_VIEW[acc];
+  charts.accStructureChart.setOption({
+    tooltip: {
+      trigger: 'item',
+      formatter: '{b}<br>数量：{c}<br>占比：{d}%'
+    },
+    series: [{
+      type: 'pie',
+      radius: ['42%', '68%'],
+      data: [
+        { name: '搭售销量', value: d.attach_qty },
+        { name: '单独销量', value: d.solo_qty }
+      ],
+      label: { formatter: '{b}\\n{d}%' }
+    }]
+  });
+}
+
+function renderQuadrant() {
+  const points = ACCESSORIES.map(acc => {
+    const d = ACC_VIEW[acc];
+    return {
+      name: acc,
+      value: [d.attach_share, d.attach_revenue, d.attach_qty, d.avg_margin]
+    };
+  });
+
+  charts.quadrantChart.setOption({
+    tooltip: {
+      formatter: p => {
+        const v = p.value;
+        return '<b>' + p.name + '</b><br>搭售占比：' + v[0] + '%<br>搭售金额：' + formatMoney(v[1]) + '<br>搭售销量：' + v[2] + '<br>平均毛利率：' + v[3] + '%';
+      }
+    },
+    xAxis: {
+      name: '搭售占比',
+      min: 0,
+      max: 100,
+      axisLabel: { formatter: '{value}%' },
+      splitLine: { lineStyle: { type: 'dashed' } }
+    },
+    yAxis: {
+      name: '搭售金额',
+      min: 0,
+      axisLabel: { formatter: value => '¥' + value + 'M' },
+      splitLine: { lineStyle: { type: 'dashed' } }
+    },
+    series: [{
+      type: 'scatter',
+      symbolSize: p => Math.max(18, p[2] / 25),
+      data: points,
+      label: {
+        show: true,
+        formatter: p => p.name
+      },
+      markLine: {
+        silent: true,
+        data: [{ xAxis: 50 }, { yAxis: 1.5 }]
+      }
+    }]
+  });
+}
+
+function renderPairRevenue(acc) {
+  const d = ACC_VIEW[acc].pair_revenue;
+  const names = Object.keys(d);
+  const vals = names.map(k => d[k]);
+
+  charts.pairRevenueChart.setOption({
+    tooltip: {
+      trigger: 'axis',
+      formatter: params => params[0].axisValue + '<br>' + params[0].marker + '搭售金额：' + formatMoney(params[0].data)
+    },
+    xAxis: { type: 'category', data: names },
+    yAxis: { type: 'value', axisLabel: { formatter: value => '¥' + value + 'M' } },
+    series: [{
+      type: 'bar',
+      data: vals,
+      label: { show: true, formatter: p => '¥' + p.value + 'M' }
+    }]
+  });
+}
+
+function renderTable() {
+  const tbody = document.getElementById('accTableBody');
+  const rows = ACCESSORIES.map(acc => {
+    const d = ACC_VIEW[acc];
+    let tag = '低效件';
+    let cls = 'tag-red';
+    if (d.attach_share >= 70 && d.attach_revenue >= 2) {
+      tag = '核心件';
+      cls = 'tag-green';
+    } else if (d.attach_share < 70 && d.attach_revenue >= 2) {
+      tag = '潜力件';
+      cls = 'tag-yellow';
+    }
+    return {
+      acc: acc,
+      attach_qty: d.attach_qty,
+      attach_revenue: d.attach_revenue,
+      solo_qty: d.solo_qty,
+      attach_share: d.attach_share,
+      avg_margin: d.avg_margin,
+      tag: tag,
+      cls: cls
+    };
+  }).sort((a,b) => b.attach_revenue - a.attach_revenue);
+
+  tbody.innerHTML = rows.map(r => (
+    '<tr>' +
+      '<td>' + r.acc + '</td>' +
+      '<td>' + r.attach_qty + '</td>' +
+      '<td>' + formatMoney(r.attach_revenue) + '</td>' +
+      '<td>' + r.attach_share + '%</td>' +
+      '<td>' + r.avg_margin + '%</td>' +
+      '<td><span class="tag ' + r.cls + '">' + r.tag + '</span></td>' +
+    '</tr>'
+  )).join('');
+}
+
+function renderAll() {
+  const product = mainProductSelect.value;
+  const country = countrySelect.value;
+  const acc = accessorySelect.value;
+  renderKpis(product, country);
+  renderMainCharts(product);
+  renderCountryChart(product);
+  renderAccessoryStructure(acc);
+  renderQuadrant();
+  renderPairRevenue(acc);
+  renderTable();
+}
+
+mainProductSelect.addEventListener('change', renderAll);
+countrySelect.addEventListener('change', renderAll);
+accessorySelect.addEventListener('change', renderAll);
+
+renderAll();
+window.addEventListener('resize', () => {
+  Object.values(charts).forEach(c => c.resize());
+});
+</script>
+</body>
+</html>
+"""
+
+html = (
+    html.replace("__DATA__", json.dumps(data, ensure_ascii=False))
+        .replace("__ACC_VIEW__", json.dumps(acc_view, ensure_ascii=False))
+        .replace("__MAIN_PRODUCTS__", json.dumps(main_products, ensure_ascii=False))
+        .replace("__ACCESSORIES__", json.dumps(accessories, ensure_ascii=False))
+)
+
+out.write_text(html, encoding="utf-8")
+print(str(out))
