@@ -8,16 +8,24 @@
 <style>
 body{margin:0;font-family:-apple-system;background:#f5f7fb;color:#1f2937}
 .header{background:#0f172a;color:#fff;padding:24px}
-.container{max-width:1400px;margin:auto;padding:20px}
+.container{max-width:1500px;margin:auto;padding:20px}
 
-/* 核心口径说明 */
-.tip{
-background:#fff;
-padding:16px;
-border-radius:10px;
+/* 筛选器 */
+.filters{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
 margin-bottom:20px;
-color:#475467;
-line-height:1.7;
+}
+.filter{
+background:#fff;
+padding:12px;
+border-radius:10px;
+}
+select{
+width:100%;
+padding:8px;
+border-radius:8px;
 }
 
 /* KPI */
@@ -32,112 +40,153 @@ background:#fff;
 padding:18px;
 border-radius:12px;
 }
-.kpi p{
-font-size:13px;
-color:#667085;
-line-height:1.6;
-margin-top:8px;
-}
+.kpi p{font-size:13px;color:#667085}
 
-/* 图表 */
+/* 模块 */
 .grid{
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:16px;
 margin-bottom:20px;
 }
-
 .card{
 background:#fff;
 padding:16px;
 border-radius:12px;
 }
+.desc{font-size:13px;color:#667085;margin-bottom:10px;line-height:1.6}
+.chart{height:320px}
 
-.desc{
-font-size:13px;
-color:#667085;
-line-height:1.7;
-margin-bottom:10px;
-}
-
-.chart{height:360px}
+/* 表 */
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #eee}
+.tag{padding:4px 10px;border-radius:20px;font-size:12px}
+.green{background:#e8f7ee;color:#117a37}
+.yellow{background:#fff6df;color:#9a6700}
+.red{background:#fdecec;color:#b42318}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-<h2>Vernal 搭售生态分析看板</h2>
+<h2>Vernal 搭售生态分析看板 Demo</h2>
+<p>从主销品视角，重点评估“每卖出一个主销品，能带出多少配件”；从配件视角，重点评估“该配件有多少销量来自搭售，以及对哪些主销品贡献更大”。 模块输出既服务于页面搭售推荐、组合设计，也服务于低效配件识别与SKU结构优化。</p>
 </div>
 
 <div class="container">
 
-<!-- 核心口径 -->
-<div class="tip">
-搭售率 = 搭售销量 / 主销品销量；搭售金额 = 搭售行为产生的配件收入。
-用于判断主销品带货能力及配件收入贡献。
+<!-- 筛选 -->
+<div class="filters">
+<div class="filter">
+国家
+<select id="country">
+<option>All</option><option>US</option><option>UK</option><option>DE</option>
+</select>
+</div>
+
+<div class="filter">
+主销品
+<select id="product">
+<option>V0.7一型整桌</option>
+<option>V0.7一型老板桌</option>
+<option>V0.7L型整桌</option>
+<option>V0.7L型老板桌</option>
+</select>
+</div>
+
+<div class="filter">
+配件
+<select id="acc">
+<option>小高台</option>
+<option>V系列边柜</option>
+<option>线缆挂件</option>
+<option>键盘托</option>
+</select>
+</div>
+
+<div class="filter">
+销售月份
+<select><option>2026-03</option></select>
+</div>
 </div>
 
 <!-- KPI -->
 <div class="kpis">
-
 <div class="kpi">
 <h2>1820</h2>
-<b>主销品销量</b>
+主销品销量
 <p>用于衡量主销品流量入口规模。销量高但搭售率低，通常意味着搭售能力未被充分释放。</p>
 </div>
 
 <div class="kpi">
 <h2>42%</h2>
-<b>整体搭售率</b>
-<p>反映主销品带出配件的能力。值越高，说明该主销品越能形成完整组合销售。</p>
+搭售率
+<p>反映主销品带出配件的能力。值越高，说明该主销品越能形成完整的组合销售。</p>
 </div>
 
 <div class="kpi">
 <h2>¥12.7M</h2>
-<b>搭售金额</b>
-<p>仅统计搭售行为产生的配件收入，用于衡量搭售对收入贡献的大小。</p>
+搭售金额
+<p>仅统计搭售行为下产生的配件收入，用于判断搭售对收入贡献的大小。</p>
+</div>
 </div>
 
-</div>
-
-<!-- 图 -->
+<!-- 1+2 -->
 <div class="grid">
 
 <div class="card">
-<h3>一、主销品视角：不同配件的搭售率</h3>
-<div class="desc">
-目的：识别最容易被带出的配件  
-看法：高搭售率配件适合作为默认推荐，低搭售率说明推荐策略可能不足
-</div>
+<h3>一、搭售率</h3>
+<div class="desc">识别最容易带出的配件</div>
 <div id="c1" class="chart"></div>
 </div>
 
 <div class="card">
-<h3>二、主销品视角：不同配件的搭售金额</h3>
-<div class="desc">
-目的：识别真正贡献收入的配件  
-看法：搭售率高不一定高价值，应优先关注高金额配件
-</div>
+<h3>二、搭售金额</h3>
+<div class="desc">识别高价值配件</div>
 <div id="c2" class="chart"></div>
 </div>
 
-<div class="card">
-<h3>三、主销品视角：国家差异</h3>
-<div class="desc">
-目的：识别不同站点的搭售能力差异  
-看法：差异通常来自用户习惯或推荐策略不同
 </div>
+
+<!-- 3+4 -->
+<div class="grid">
+
+<div class="card">
+<h3>三、国家差异</h3>
+<div class="desc">识别不同站点表现</div>
 <div id="c3" class="chart"></div>
 </div>
 
 <div class="card">
-<h3>四、配件视角：结构分析</h3>
-<div class="desc">
-目的：判断配件是否依赖搭售  
-看法：搭售占比高说明依赖主销品驱动
-</div>
+<h3>四、搭售结构</h3>
+<div class="desc">判断是否依赖搭售</div>
 <div id="c4" class="chart"></div>
+</div>
+
+</div>
+
+<!-- 5 -->
+<div class="card">
+<h3>五、四象限分析</h3>
+<div class="desc">识别核心 / 潜力 / 低效件</div>
+<div id="c5" class="chart"></div>
+</div>
+
+<!-- 6+7 -->
+<div class="grid">
+
+<div class="card">
+<h3>六、主销品贡献</h3>
+<div class="desc">配件被哪些主销品带动</div>
+<div id="c6" class="chart"></div>
+</div>
+
+<div class="card">
+<h3>七、SKU清单</h3>
+<table id="table"></table>
+</div>
+
 </div>
 
 </div>
@@ -146,39 +195,71 @@ margin-bottom:10px;
 
 // 数据
 const acc=["小高台","V系列边柜","线缆挂件","键盘托"]
+const rate=[45,38,25,20]
+const rev=[5,3.8,2.5,2]
 
 // 图1
 echarts.init(c1).setOption({
 tooltip:{trigger:"axis"},
-xAxis:{data:acc},
-yAxis:{},
-series:[{type:"line",data:[45,38,25,20]}]
+xAxis:{data:acc},yAxis:{},
+series:[{type:"line",data:rate}]
 })
 
 // 图2
 echarts.init(c2).setOption({
 tooltip:{trigger:"axis"},
-xAxis:{data:acc},
-yAxis:{},
-series:[{type:"bar",data:[5,3.8,2.5,2]}]
+xAxis:{data:acc},yAxis:{},
+series:[{type:"bar",data:rev}]
 })
 
 // 图3
 echarts.init(c3).setOption({
 tooltip:{trigger:"axis"},
-xAxis:{data:["US","CA","UK","DE"]},
+xAxis:{data:["US","UK","DE"]},
 yAxis:{},
-series:[{type:"bar",data:[30,25,22,28]}]
+series:[{type:"bar",data:[30,25,28]}]
 })
 
 // 图4
 echarts.init(c4).setOption({
 tooltip:{trigger:"item"},
 series:[{type:"pie",data:[
-{value:80,name:"搭售"},
-{value:20,name:"单买"}
+{value:80,name:"搭售销量"},
+{value:20,name:"单独销量"}
 ]}]
 })
+
+// 图5
+echarts.init(c5).setOption({
+tooltip:{formatter:p=>`${p.data[2]}<br>搭售率:${p.data[0]}%<br>金额:${p.data[1]}`},
+xAxis:{name:"搭售率"},yAxis:{name:"金额"},
+series:[{type:"scatter",
+data:acc.map((a,i)=>[rate[i],rev[i],a]),
+label:{show:true,formatter:p=>p.data[2]}
+}]
+})
+
+// 图6
+echarts.init(c6).setOption({
+tooltip:{trigger:"axis"},
+xAxis:{data:["一型整桌","一型老板桌","L整桌","L老板桌"]},
+yAxis:{},
+series:[{type:"bar",data:[5,4.3,5.6,5.2]}]
+})
+
+// 表
+table.innerHTML=acc.map((a,i)=>{
+let tag="低效件",cls="red"
+if(rev[i]>3){tag="核心件";cls="green"}
+else if(rev[i]>2){tag="潜力件";cls="yellow"}
+
+return `<tr>
+<td>${a}</td>
+<td>¥${rev[i]}M</td>
+<td>${rate[i]}%</td>
+<td><span class="tag ${cls}">${tag}</span></td>
+</tr>`
+}).join("")
 
 </script>
 
