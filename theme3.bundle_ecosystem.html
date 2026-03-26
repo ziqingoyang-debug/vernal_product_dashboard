@@ -1,89 +1,94 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>搭售生态分析看板</title>
-
+<meta charset="UTF-8">
+<title>Vernal 搭售生态分析看板 Demo</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 
 <style>
-body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI";
-    background: #0b1a2f;
-    color: #fff;
-}
-
-.header {
-    padding: 20px 30px;
-    background: #142a4a;
-}
-
-.container {
-    padding: 20px;
-}
-
-.card {
-    background: #1e293b;
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-}
-
-.chart {
-    height: 400px;
-}
+body { margin:0; font-family:-apple-system; background:#f5f7fb;}
+.header{background:#0f172a;color:#fff;padding:20px 30px;}
+.container{padding:20px;max-width:1400px;margin:auto;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.card{background:#fff;border-radius:14px;padding:16px;}
+.chart{height:360px;}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:20px;}
+.kpi{background:#fff;padding:16px;border-radius:12px;}
+.kpi h2{margin:0;}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-    <h2>📊 搭售生态分析看板</h2>
+<h2>Vernal 搭售生态分析看板 Demo</h2>
 </div>
 
 <div class="container">
 
-    <div class="card">
-        <h3>主销品搭售率</h3>
-        <div id="chart1" class="chart"></div>
-    </div>
+<div class="kpis">
+<div class="kpi"><h2 id="k1"></h2><p>主销品销量</p></div>
+<div class="kpi"><h2 id="k2"></h2><p>搭售率</p></div>
+<div class="kpi"><h2 id="k3"></h2><p>搭售金额</p></div>
+<div class="kpi"><h2 id="k4"></h2><p>搭售单产</p></div>
+</div>
 
-    <div class="card">
-        <h3>搭售金额</h3>
-        <div id="chart2" class="chart"></div>
-    </div>
+<div class="grid">
+<div class="card"><div id="c1" class="chart"></div></div>
+<div class="card"><div id="c2" class="chart"></div></div>
+<div class="card"><div id="c3" class="chart"></div></div>
+<div class="card"><div id="c4" class="chart"></div></div>
+</div>
 
 </div>
 
 <script>
 
-const accessories = ["显示器支架","线缆管理","抽屉","v系列边柜","小高台","隐私挡板"]
+const accessories=["显示器支架","理线槽","抽屉","脚踏板","杯架","隐私挡板"]
 
-const data = {
-    rate: [42,36,28,18,12,6],
-    revenue: [5.0,3.5,2.0,1.2,0.7,0.3]
+const d={
+main_sales:1820,
+attach_rate:[42,36,28,18,12,6],
+attach_revenue:[5,3.5,2,1.2,0.7,0.3]
 }
 
+// KPI
+document.getElementById("k1").innerText=d.main_sales
+document.getElementById("k2").innerText=
+(d.attach_rate.reduce((a,b)=>a+b)/6).toFixed(1)+"%"
+document.getElementById("k3").innerText="¥"+d.attach_revenue.reduce((a,b)=>a+b,0)+"M"
+document.getElementById("k4").innerText="¥6978"
+
 // 图1
-echarts.init(document.getElementById('chart1')).setOption({
-    xAxis: { type: 'category', data: accessories },
-    yAxis: { type: 'value' },
-    series: [{
-        type: 'line',
-        data: data.rate
-    }]
+echarts.init(c1).setOption({
+xAxis:{data:accessories},
+yAxis:{},
+series:[{type:'line',data:d.attach_rate}]
 })
 
 // 图2
-echarts.init(document.getElementById('chart2')).setOption({
-    xAxis: { type: 'category', data: accessories },
-    yAxis: { type: 'value' },
-    series: [{
-        type: 'bar',
-        data: data.revenue
-    }]
+echarts.init(c2).setOption({
+xAxis:{data:accessories},
+yAxis:{},
+series:[{type:'bar',data:d.attach_revenue}]
+})
+
+// 图3
+echarts.init(c3).setOption({
+xAxis:{data:["US","CA","UK","DE"]},
+yAxis:{},
+series:[{type:'bar',data:[31.5,27.3,25.4,29.8]}]
+})
+
+// 图4
+echarts.init(c4).setOption({
+series:[{
+type:'pie',
+data:[
+{value:85,name:'搭售'},
+{value:15,name:'单买'}
+]
+}]
 })
 
 </script>
