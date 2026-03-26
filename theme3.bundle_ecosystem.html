@@ -191,7 +191,7 @@ th,td{padding:10px;border-bottom:1px solid #eee}
 <th>配件</th>
 <th>搭售销量</th>
 <th>搭售金额</th>
-<th>搭售占比</th>
+<th>搭售率</th>
 <th>产品定价毛利率</th>
 <th>标签</th>
 </tr>
@@ -326,17 +326,17 @@ series:[{type:"bar",data:[5,4.3,5.6,5.2]}]
 // 表
 const sales = [1800, 1400, 900, 700];       // 搭售销量
 const revenue = [5, 3.8, 2.5, 2];       // 搭售金额
-const rate2 = [80.0, 86.3, 85.2, 87.1];        // 搭售占比
+const rate2 = [80.0, 86.3, 85.2, 87.1];        // 搭售率
 const margin = [61.2, 58.5, 55.5, 50];        // 产品定价毛利率
 
 table.innerHTML = acc.map((a,i)=>{
 
 let tag="低效件",cls="red"
 
-if(rate2[i]>80 && revenue[i]>5){
+if(rate2[i]>80 && revenue[i]>3){
   tag="核心件"; cls="green"
 }
-else if(rate2[i]<80 && revenue[i]>5){
+else if(rate2[i]<80 && revenue[i]>3){
   tag="潜力件"; cls="yellow"
 }
 
