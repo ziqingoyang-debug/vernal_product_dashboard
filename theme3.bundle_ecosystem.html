@@ -10,9 +10,9 @@ body{margin:0;background:#0b1220;color:#e5e7eb;font-family:Arial;}
 .container{max-width:1400px;margin:auto;padding:20px;}
 .header{padding:20px;background:linear-gradient(135deg,#020617,#0f172a);}
 button{padding:6px 12px;border-radius:6px;border:none;cursor:pointer}
-select{width:100%;padding:8px;background:#020617;color:#fff;border:1px solid #334155;border-radius:6px}
+select{width:100%;padding:8px;background:#020617;color:#fff;border:1px solid #334155;border-radius:6px;margin-top:6px}
 
-.section-title{font-size:20px;margin:30px 0 10px}
+.section-title{font-size:22px;margin:30px 0 10px}
 .card{background:#111827;padding:16px;border-radius:12px;margin-bottom:20px}
 .chart{height:420px}
 .big-chart{height:520px}
@@ -29,7 +29,7 @@ select{width:100%;padding:8px;background:#020617;color:#fff;border:1px solid #33
 
 <div class="header">
 <h2>搭售生态分析看板</h2>
-<button onclick="goHome()">返回首页</button>
+<button onclick="location.href='index.html'">返回首页</button>
 </div>
 
 <div class="container">
@@ -40,7 +40,7 @@ select{width:100%;padding:8px;background:#020617;color:#fff;border:1px solid #33
 销售月份<select><option>2026-03</option></select>
 </div>
 
-<!-- 一、主销品视角 -->
+<!-- 一 -->
 <div class="section-title">一、主销品视角</div>
 
 <div class="card">
@@ -58,58 +58,36 @@ select{width:100%;padding:8px;background:#020617;color:#fff;border:1px solid #33
 <div class="card">
 <h3>1.1 主销品搭售结构分析</h3>
 <div class="desc">
-分析方向：不同配件搭售率 / 金额 / 结构占比  
+分析：搭售率 / 金额 / 结构占比<br>
+目的：识别核心搭售组合
+</div>
+
+<div class="kpis">
+<div class="kpi"><div class="value">10</div>主销品销量<div class="desc">订单数</div></div>
+<div class="kpi"><div class="value">7</div>搭售销量<div class="desc">被带出数量</div></div>
+<div class="kpi"><div class="value">70%</div>搭售率<div class="desc">搭售/主销</div></div>
+<div class="kpi"><div class="value">$290</div>搭售金额<div class="desc">配件收入</div></div>
+</div>
+
+</div>
+
+<!-- 1.2 -->
+<div class="card">
+<h3>1.2 搭售结构分析</h3>
+<div class="desc">
+分析：不同配件搭售率、金额、结构占比<br>
 目的：识别主销品核心搭售组合
 </div>
 </div>
 
-<!-- KPI -->
-<div class="kpis">
-
-<div class="kpi">
-<div class="value">10</div>
-主销品销量
-<div class="desc">
-目的：衡量销售规模<br>
-公式：订单数
-</div>
-</div>
-
-<div class="kpi">
-<div class="value">7</div>
-搭售销量
-<div class="desc">
-目的：衡量带货能力<br>
-公式：被带出配件数量
-</div>
-</div>
-
-<div class="kpi">
-<div class="value">70%</div>
-搭售率
-<div class="desc">
-公式：搭售销量 / 主销品销量
-</div>
-</div>
-
-<div class="kpi">
-<div class="value">$290</div>
-搭售金额
-<div class="desc">
-公式：配件收入
-</div>
-</div>
-
-</div>
-
-<!-- 气泡 -->
+<!-- 1.3 -->
 <div class="card">
 <h3>1.3 主销品 × 搭售件矩阵</h3>
-<div class="desc">横轴：搭售率｜纵轴：搭售金额｜气泡：销量</div>
+<div class="desc">横轴：搭售率｜纵轴：金额｜气泡：销量</div>
 <div id="c1" class="big-chart"></div>
 </div>
 
-<!-- 二、搭售件视角 -->
+<!-- 二 -->
 <div class="section-title">二、搭售件视角</div>
 
 <div class="card">
@@ -128,31 +106,10 @@ select{width:100%;padding:8px;background:#020617;color:#fff;border:1px solid #33
 <h3>2.1 搭售件整体能力</h3>
 
 <div class="kpis">
-
-<div class="kpi">
-<div class="value">8</div>
-搭售销量
-<div class="desc">公式：搭售订单数</div>
-</div>
-
-<div class="kpi">
-<div class="value">2</div>
-单独销量
-<div class="desc">公式：单独购买数</div>
-</div>
-
-<div class="kpi">
-<div class="value">$400</div>
-搭售金额
-<div class="desc">公式：搭售收入</div>
-</div>
-
-<div class="kpi">
-<div class="value">53%</div>
-搭售占比
-<div class="desc">搭售销量 / 总销量</div>
-</div>
-
+<div class="kpi"><div class="value">8</div>搭售销量</div>
+<div class="kpi"><div class="value">2</div>单独销量</div>
+<div class="kpi"><div class="value">$400</div>搭售金额</div>
+<div class="kpi"><div class="value">53%</div>搭售占比</div>
 </div>
 
 </div>
@@ -160,20 +117,14 @@ select{width:100%;padding:8px;background:#020617;color:#fff;border:1px solid #33
 <!-- 2.2 -->
 <div class="card">
 <h3>2.2 主销品来源分析</h3>
-<div class="desc">
-分析：不同主销品贡献  
-目的：识别带动来源
-</div>
+<div class="desc">分析来源贡献</div>
 <div id="c2" class="chart"></div>
 </div>
 
 <!-- 2.3 -->
 <div class="card">
 <h3>2.3 搭售结构分析</h3>
-<div class="desc">
-分析：搭售 vs 单独销售  
-目的：判断独立销售能力
-</div>
+<div class="desc">搭售 vs 单独</div>
 <div id="c3" class="chart"></div>
 </div>
 
@@ -183,18 +134,34 @@ select{width:100%;padding:8px;background:#020617;color:#fff;border:1px solid #33
 <div id="c4" class="big-chart"></div>
 </div>
 
+<!-- 2.5 -->
+<div class="card">
+<h3>2.5 配件金额分布</h3>
+<div class="desc">看依赖度</div>
+<div id="c5" class="chart"></div>
+</div>
+
+<!-- 2.6 -->
+<div class="card">
+<h3>2.6 低效/潜力搭售件清单</h3>
+
+<table width="100%">
+<tr><th>配件</th><th>销量</th><th>金额</th><th>占比</th><th>毛利</th><th>标签</th></tr>
+<tr><td>显示器支架</td><td>2624</td><td>$20.1M</td><td>85%</td><td>61%</td><td style="color:#22c55e">核心件</td></tr>
+<tr><td>隐私挡板</td><td>318</td><td>$0.96M</td><td>85%</td><td>37%</td><td style="color:red">低效件</td></tr>
+</table>
+
+</div>
+
 </div>
 
 <script>
 
-function goHome(){window.location.href="index.html"}
-
-// 主销品气泡
+// 1.3
 echarts.init(document.getElementById('c1')).setOption({
-tooltip:{
-formatter:p=>{
+tooltip:{formatter:p=>{
 let d=p.data
-return `${d.name}<br>搭售率:${d.value[0]}%<br>金额:$${d.value[1]}<br>销量:${d.value[2]}`
+return `${d.name}<br>率:${d.value[0]}%<br>金额:$${d.value[1]}<br>销量:${d.value[2]}`
 }},
 series:[{
 type:'scatter',
@@ -209,17 +176,12 @@ data:[
 }]
 })
 
-// 来源
+// 2.2
 echarts.init(document.getElementById('c2')).setOption({
-tooltip:{},
-series:[{
-type:'bar',
-data:[5,3,2],
-label:{show:true}
-}]
+series:[{type:'bar',data:[5,3,2]}]
 })
 
-// 结构
+// 2.3
 echarts.init(document.getElementById('c3')).setOption({
 series:[{
 type:'pie',
@@ -231,10 +193,9 @@ data:[
 }]
 })
 
-// 四象限
+// 2.4
 echarts.init(document.getElementById('c4')).setOption({
-tooltip:{
-formatter:p=>{
+tooltip:{formatter:p=>{
 let d=p.data
 return `${d.name}<br>占比:${d.value[0]}%<br>金额:$${d.value[1]}<br>销量:${d.value[2]}`
 }},
@@ -247,6 +208,16 @@ data:[
 {name:"理线槽",value:[86,13700000,2100]},
 {name:"隐私挡板",value:[85,960000,318]}
 ]
+}]
+})
+
+// 2.5
+echarts.init(document.getElementById('c5')).setOption({
+tooltip:{formatter:p=>`$${p.value}`},
+series:[{
+type:'bar',
+data:[5000000,4300000,5600000],
+label:{show:true}
 }]
 })
 
