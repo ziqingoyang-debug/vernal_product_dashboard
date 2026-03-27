@@ -186,7 +186,7 @@ height:320px;
 
 <div class="kpi">
 <div class="value">0.18%</div>
-<strong>订单差评率</strong>
+<strong>VOC：订单差评率</strong>
 <div class="desc">
 定义：1-3星订单数 / 总订单数<br>
 目的：衡量产品基础体验是否存在明显问题，“品质感”VOC来源之一<br>
@@ -197,7 +197,7 @@ height:320px;
 
 <div class="kpi">
 <div class="value">0.25%</div>
-<strong>客诉率</strong>
+<strong>VOC：客诉率</strong>
 <div class="desc">
 定义：客诉订单数 / 总订单数<br>
 目的：衡量用户使用过程中是否遇到问题，“品质感”VOC来源之一<br>
@@ -222,7 +222,7 @@ height:320px;
 <div class="grid">
 
 <div class="card">
-<h3>一、订单差评率趋势</h3>
+<h3>一、VOC：订单差评率趋势</h3>
 <div class="desc">
 目的：观察基础体验问题是否持续改善<br>
 看法：持续下降 → 用户体验优化有效；异常上升 → 需排查问题批次
@@ -231,7 +231,7 @@ height:320px;
 </div>
 
 <div class="card">
-<h3>二、客诉率趋势</h3>
+<h3>二、VOC：客诉率趋势</h3>
 <div class="desc">
 目的：观察用户使用问题变化<br>
 看法：与订单差评率趋势同理
@@ -245,7 +245,7 @@ height:320px;
 <div class="grid">
 
 <div class="card">
-<h3>三、订单差评问题结构</h3>
+<h3>三、VOC：订单差评问题结构</h3>
 <div class="desc">
 目的：识别核心质量问题类型<br>
 看法：功能/结构问题占比高 → 产品本身问题；包装问题 → 履约问题
@@ -255,7 +255,7 @@ height:320px;
 </div>
 
 <div class="card">
-<h3>四、客诉问题结构</h3>
+<h3>四、VOC：客诉问题结构</h3>
 <div class="desc">
 目的：识别用户客诉来源<br>
 看法：功能占比高 → 产品设计问题；外观问题 → 审美相关
@@ -285,7 +285,7 @@ function goHome(){
   window.location.href="index.html"
 }
 
-// 订单差评趋势
+// VOC：订单差评趋势
 echarts.init(c1).setOption({
 tooltip:{trigger:'axis'},
 xAxis:{data:["10月","11月","12月","1月","2月"]},
@@ -297,7 +297,7 @@ label:{show:true,formatter:'{c}%'}
 }]
 })
 
-// 客诉趋势
+// VOC：客诉趋势
 echarts.init(c2).setOption({
 tooltip:{trigger:'axis'},
 xAxis:{data:["10月","11月","12月","1月","2月"]},
@@ -309,7 +309,7 @@ label:{show:true,formatter:'{c}%'}
 }]
 })
 
-// 订单差评结构
+// VOC：订单差评结构
 echarts.init(c3).setOption({
 tooltip:{trigger:'item'},
 series:[{
@@ -324,7 +324,7 @@ data:[
 }]
 })
 
-// 客诉结构
+// VOC：客诉结构
 echarts.init(c4).setOption({
 tooltip:{trigger:'item'},
 series:[{
