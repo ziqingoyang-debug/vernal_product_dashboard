@@ -224,8 +224,11 @@ xAxis:{data:["快装","外观好看","科技感","高级"]},
 yAxis:{},
 series:[{
 type:"bar",
-data:[30%,25%,20%,15%],
-label:{show:true}
+data:[30,25,20,15],
+label:{
+  show:true,
+  formatter: '{c}%'
+}
 }]
 })
 
