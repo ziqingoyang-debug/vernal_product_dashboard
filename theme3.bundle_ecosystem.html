@@ -27,6 +27,10 @@ select{width:100%;background:#020617;color:#fff;padding:6px;border-radius:6px;bo
 .card{background:#111827;padding:16px;border-radius:12px;margin-bottom:20px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .chart{height:320px}
+
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{padding:10px;border-bottom:1px solid #334155;text-align:left}
+th{background:#1f2937}
 </style>
 </head>
 
@@ -40,59 +44,46 @@ select{width:100%;background:#020617;color:#fff;padding:6px;border-radius:6px;bo
 
 <div class="container">
 
-<!-- 顶部筛选 -->
+<!-- 筛选 -->
 <div class="filters">
 <div class="filter">国家<select><option>All</option><option>US</option></select></div>
 <div class="filter">销售月份<select><option>2026-03</option></select></div>
 </div>
 
-<!-- ================= 主销品视角 ================= -->
-
+<!-- ========== 一、主销品视角 ========== -->
 <div class="card">
 <h3>一、主销品视角</h3>
 <div class="desc">筛选主销品（支持多选）</div>
-
-<div class="filter">
 <select>
 <option>All</option>
 <option>v0.7一型整桌</option>
 <option>v0.7一型老板桌</option>
 <option>v0.7L型整桌</option>
+<option>v0.7L型老板桌</option>
 </select>
-</div>
 </div>
 
 <!-- KPI -->
 <div class="card">
 <h3>1.1 整体搭售能力</h3>
-
 <div class="kpis">
 
 <div class="kpi">
 <div class="value">10</div>
 主销品销量
-<div class="desc">
-目的：衡量主销品销售规模<br>
-公式：订单数
-</div>
+<div class="desc">目的：衡量销售规模<br>公式：订单数</div>
 </div>
 
 <div class="kpi">
 <div class="value">70%</div>
 搭售率
-<div class="desc">
-目的：评估带出能力<br>
-公式：搭售销量 / 主销品销量
-</div>
+<div class="desc">目的：评估带出能力<br>公式：搭售销量 / 主销品销量</div>
 </div>
 
 <div class="kpi">
 <div class="value">$290</div>
 搭售金额
-<div class="desc">
-目的：评估带来的收入<br>
-公式：搭售订单产生的收入
-</div>
+<div class="desc">目的：评估收入贡献<br>公式：搭售收入</div>
 </div>
 
 </div>
@@ -113,27 +104,22 @@ select{width:100%;background:#020617;color:#fff;padding:6px;border-radius:6px;bo
 
 </div>
 
-<!-- 1.3 气泡图 -->
+<!-- 1.3 气泡 -->
 <div class="card">
 <h3>1.3 主销品 × 搭售件矩阵</h3>
-<div class="desc">
-目的：识别高价值组合<br>
-横轴：搭售率，纵轴：金额<br>
-气泡大小：搭售销量
-</div>
-<div id="c3" class="chart"></div>
+<div class="desc">气泡大小 = 搭售销量</div>
+<div id="c3" style="height:420px"></div>
 </div>
 
-<!-- ================= 配件视角 ================= -->
 
+<!-- ========== 二、搭售件视角 ========== -->
 <div class="card">
 <h3>二、搭售件视角</h3>
-<div class="desc">筛选搭售件（支持多选）</div>
-
+<div class="desc">筛选搭售件</div>
 <select>
 <option>All</option>
 <option>小高台</option>
-<option>边柜</option>
+<option>V边柜</option>
 <option>线缆</option>
 <option>键盘托</option>
 </select>
@@ -144,35 +130,25 @@ select{width:100%;background:#020617;color:#fff;padding:6px;border-radius:6px;bo
 <h3>2.1 搭售整体能力</h3>
 
 <div class="kpis">
-
 <div class="kpi">
 <div class="value">8</div>
 搭售销量
-<div class="desc">
-目的：评估被带出次数<br>
-公式：搭售订单数量
-</div>
+<div class="desc">公式：搭售订单数</div>
 </div>
 
 <div class="kpi">
 <div class="value">$400</div>
 搭售金额
-<div class="desc">
-目的：评估收入贡献<br>
-公式：搭售收入
-</div>
+<div class="desc">公式：搭售收入</div>
 </div>
 
 <div class="kpi">
 <div class="value">53%</div>
 搭售占比
-<div class="desc">
-目的：评估依赖程度<br>
-公式：搭售销量 / 总销量
+<div class="desc">公式：搭售销量 / 总销量</div>
 </div>
 </div>
 
-</div>
 </div>
 
 <!-- 来源 + 结构 -->
@@ -190,18 +166,62 @@ select{width:100%;background:#020617;color:#fff;padding:6px;border-radius:6px;bo
 
 </div>
 
-<!-- 四象限 -->
+<!-- 2.4 -->
 <div class="card">
-<h3>2.4 搭售件分层（四象限）</h3>
+<h3>2.4 配件视角：主销品 × 配件 四象限分析</h3>
 <div class="desc">
-气泡大小 = 搭售销量<br>
-横轴 = 搭售率<br>
-纵轴 = 搭售金额
+横轴：搭售占比<br>
+纵轴：搭售金额($)<br>
+气泡大小：搭售销量
 </div>
-<div id="c6" class="chart"></div>
+<div id="c6" style="height:420px"></div>
+</div>
+
+<!-- 2.5 -->
+<div class="card">
+<h3>2.5 配件视角：所选配件对各主销品的搭售金额分布</h3>
+<div class="desc">分析不同主销品贡献</div>
+<div id="c7" class="chart"></div>
+</div>
+
+<!-- 2.6 -->
+<div class="card">
+<h3>2.6 低效/潜力搭售件识别清单</h3>
+
+<table>
+<tr>
+<th>配件</th>
+<th>销量</th>
+<th>金额</th>
+<th>占比</th>
+<th>毛利率</th>
+<th>标签</th>
+</tr>
+
+<tr>
+<td>显示器支架</td>
+<td>2624</td>
+<td>$20.1M</td>
+<td>85.9%</td>
+<td>61%</td>
+<td style="color:#22c55e">核心件</td>
+</tr>
+
+<tr>
+<td>隐私挡板</td>
+<td>318</td>
+<td>$0.96M</td>
+<td>85%</td>
+<td>37%</td>
+<td style="color:#ef4444">低效件</td>
+</tr>
+
+</table>
+
 </div>
 
 </div>
+
 
 <script>
 
@@ -223,14 +243,14 @@ yAxis:{},
 series:[{type:"bar",data:[200,150,80,40],label:{show:true}}]
 })
 
-// 气泡图1
+// 气泡（主销品）
 echarts.init(c3).setOption({
 tooltip:{formatter:p=>`${p.name}<br/>率:${p.value[0]}%<br/>金额:$${p.value[1]}`},
-xAxis:{name:"搭售率"},
-yAxis:{name:"金额"},
+xAxis:{},
+yAxis:{},
 series:[{
 type:'scatter',
-symbolSize:(d)=>d[2]*5,
+symbolSize:d=>d[2]*8,
 data:[
 {value:[70,200,5],name:"小高台"},
 {value:[50,150,4],name:"边柜"},
@@ -241,13 +261,13 @@ label:{show:true}
 }]
 })
 
-// 来源（横轴修正）
+// 来源
 echarts.init(c4).setOption({
 xAxis:{data:[
 "v0.7一型整桌",
-"v0.7一型老板桌",
 "v0.7L型整桌",
-"v0.7L型老板桌"
+"v0.7一型行政桌",
+"v0.7L型行政桌"
 ]},
 yAxis:{},
 series:[{type:"bar",data:[5,3,2,1],label:{show:true}}]
@@ -266,21 +286,37 @@ label:{formatter:'{b}:{d}%'}
 }]
 })
 
-// 四象限气泡
+// 四象限（放大）
 echarts.init(c6).setOption({
-tooltip:{formatter:p=>`${p.name}<br/>率:${p.value[0]}%<br/>金额:$${p.value[1]}`},
-xAxis:{name:"搭售率"},
-yAxis:{name:"金额"},
+tooltip:{formatter:p=>`${p.name}<br/>占比:${p.value[0]}%<br/>金额:$${p.value[1]}`},
+xAxis:{name:"搭售占比"},
+yAxis:{name:"搭售金额"},
 series:[{
 type:'scatter',
-symbolSize:(d)=>d[2]*5,
+symbolSize:d=>d[2]*10,
 data:[
-{value:[70,200,5],name:"核心件"},
-{value:[50,150,4],name:"潜力件"},
-{value:[30,80,3],name:"普通件"},
-{value:[20,40,2],name:"低效件"}
+{value:[85,20000000,2600],name:"显示器支架"},
+{value:[86,13700000,2100],name:"理线槽"},
+{value:[85,7900000,1600],name:"抽屉"},
+{value:[75,2600000,700],name:"杯架"}
 ],
 label:{show:true}
+}]
+})
+
+// 2.5
+echarts.init(c7).setOption({
+xAxis:{data:[
+"v0.7一型整桌",
+"v0.7L型整桌",
+"v0.7一型行政桌",
+"v0.7L型行政桌"
+]},
+yAxis:{},
+series:[{
+type:"bar",
+data:[5000000,4300000,5600000,5200000],
+label:{show:true,formatter:p=>'$'+(p.value/1000000)+'M'}
 }]
 })
 
