@@ -6,28 +6,85 @@
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 
 <style>
-body{margin:0;background:#0b1220;color:#e5e7eb;font-family:-apple-system}
-.container{max-width:1400px;margin:auto;padding:20px}
+body{
+margin:0;
+background:#0b1220;
+color:#e5e7eb;
+font-family:-apple-system;
+}
 
-.card{background:#111827;border-radius:12px;padding:16px;margin-bottom:20px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.kpi{background:#020617;padding:14px;border-radius:10px}
+.container{
+max-width:1400px;
+margin:auto;
+padding:20px;
+}
 
-.value{font-size:22px;font-weight:bold}
-.desc{font-size:12px;color:#94a3b8;margin-top:6px}
+/* 卡片 */
+.card{
+background:#111827;
+border-radius:12px;
+padding:16px;
+margin-bottom:20px;
+box-shadow:0 0 20px rgba(0,0,0,0.4);
+transition:0.3s;
+}
+.card:hover{
+box-shadow:0 0 25px rgba(59,130,246,0.3);
+}
 
+/* KPI */
+.kpis{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+}
+
+.kpi{
+background:#020617;
+padding:14px;
+border-radius:10px;
+}
+
+.value{
+font-size:24px;
+font-weight:bold;
+}
+
+.desc{
+font-size:12px;
+color:#94a3b8;
+margin-top:6px;
+line-height:1.6;
+}
+
+/* 图表 */
 .chart{height:360px}
-.big-chart{height:480px}
+.big-chart{height:520px}
 
-table{width:100%;border-collapse:collapse}
-th,td{padding:10px;border-bottom:1px solid #334155}
-th{background:#1f2937}
+/* 表格 */
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:10px;
+border-bottom:1px solid #334155;
+text-align:center;
+}
+
+th{
+background:#1f2937;
+}
+
+.tag-green{color:#22c55e}
+.tag-yellow{color:#f59e0b}
+.tag-red{color:#ef4444}
+
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
 <!-- ================= 主销品视角 ================= -->
@@ -39,37 +96,50 @@ th{background:#1f2937}
 <div class="kpi">
 <div class="value">10</div>
 主销品销量
-<div class="desc">公式：订单数</div>
+<div class="desc">
+目的：衡量主销品销售规模<br>
+公式：主销品销量 = 订单数
+</div>
 </div>
 
 <div class="kpi">
 <div class="value">7</div>
 搭售销量
-<div class="desc">公式：被带出的配件数量</div>
+<div class="desc">
+目的：衡量带出配件能力<br>
+公式：搭售销量 = 被带出的配件数量
+</div>
 </div>
 
 <div class="kpi">
 <div class="value">70%</div>
 搭售率
-<div class="desc">搭售销量 / 主销品销量</div>
+<div class="desc">
+目的：衡量搭售能力<br>
+公式：搭售率 = 搭售销量 / 主销品销量
+</div>
 </div>
 
 <div class="kpi">
 <div class="value">$290</div>
 搭售金额
-<div class="desc">搭售收入</div>
+<div class="desc">
+目的：衡量收入贡献<br>
+公式：搭售金额 = 配件销售收入
+</div>
 </div>
 
 </div>
 </div>
 
 
-<!-- ================= 四象限（主销品） ================= -->
+<!-- ================= 主销品四象限 ================= -->
 <div class="card">
 <h3>1.3 主销品 × 搭售件矩阵</h3>
 <div class="desc">
 横轴：搭售率 (%) ｜ 纵轴：搭售金额 ($)<br>
-气泡大小：搭售销量
+气泡大小：搭售销量<br>
+目的：识别高价值搭售组合
 </div>
 <div id="c1" class="big-chart"></div>
 </div>
@@ -84,57 +154,75 @@ th{background:#1f2937}
 <div class="kpi">
 <div class="value">8</div>
 搭售销量
+<div class="desc">
+公式：搭售订单数<br>
+目的：衡量搭售规模
+</div>
 </div>
 
 <div class="kpi">
 <div class="value">2</div>
 单独销量
+<div class="desc">
+公式：单独购买数量<br>
+目的：识别独立销售能力
+</div>
 </div>
 
 <div class="kpi">
 <div class="value">$400</div>
 搭售金额
+<div class="desc">
+公式：搭售收入<br>
+目的：衡量贡献价值
+</div>
 </div>
 
 <div class="kpi">
 <div class="value">53%</div>
 搭售占比
+<div class="desc">
+公式：搭售销量 / 总销量<br>
+目的：衡量依赖程度
+</div>
 </div>
 
 </div>
-
 </div>
 
 
-<!-- ================= 四象限（配件） ================= -->
+<!-- ================= 配件四象限 ================= -->
 <div class="card">
 <h3>2.4 配件视角：主销品 × 配件 四象限分析</h3>
 
 <div class="desc">
-横轴：搭售占比 (%)<br>
-纵轴：搭售金额 ($)<br>
+横轴：搭售占比 (%) ｜ 纵轴：搭售金额 ($)<br>
 气泡大小：搭售销量<br>
-右上：核心件 ｜ 右下：潜力件 ｜ 左下：低效件
+目的：识别核心件 / 潜力件 / 低效件
 </div>
 
 <div id="c2" class="big-chart"></div>
 </div>
 
 
-<!-- ================= 2.5 ================= -->
+<!-- ================= 分布 ================= -->
 <div class="card">
 <h3>2.5 所选配件对主销品的搭售金额分布</h3>
+<div class="desc">
+目的：识别配件依赖的主销品结构
+</div>
 <div id="c3" class="chart"></div>
 </div>
 
 
-<!-- ================= 2.6 ================= -->
+<!-- ================= 清单 ================= -->
 <div class="card">
 <h3>2.6 低效/潜力搭售件识别清单</h3>
-
 <div class="desc">
-目的：输出可用于业务决策的清单<br>
-逻辑：高搭售率+高金额=核心件
+规则：<br>
+核心件 = 高搭售率 + 高金额<br>
+潜力件 = 低搭售率 + 高金额<br>
+低效件 = 高搭售率 + 低金额
 </div>
 
 <table>
@@ -142,62 +230,78 @@ th{background:#1f2937}
 <th>配件</th><th>销量</th><th>金额</th><th>占比</th><th>毛利率</th><th>标签</th>
 </tr>
 
-<tr><td>显示器支架</td><td>2624</td><td>$20.1M</td><td>85.9%</td><td>61%</td><td style="color:#22c55e">核心件</td></tr>
-<tr><td>理线槽</td><td>2121</td><td>$13.7M</td><td>86.3%</td><td>58%</td><td style="color:#22c55e">核心件</td></tr>
-<tr><td>抽屉</td><td>1659</td><td>$7.9M</td><td>85.2%</td><td>55%</td><td style="color:#22c55e">核心件</td></tr>
-<tr><td>脚踏板</td><td>1144</td><td>$4.9M</td><td>87.1%</td><td>50%</td><td style="color:#22c55e">核心件</td></tr>
-<tr><td>杯架</td><td>737</td><td>$2.6M</td><td>75.7%</td><td>44%</td><td style="color:#f59e0b">潜力件</td></tr>
-<tr><td>隐私挡板</td><td>318</td><td>$0.96M</td><td>85%</td><td>37%</td><td style="color:#ef4444">低效件</td></tr>
+<tr><td>显示器支架</td><td>2624</td><td>$20.1M</td><td>85.9%</td><td>61%</td><td class="tag-green">核心件</td></tr>
+<tr><td>理线槽</td><td>2121</td><td>$13.7M</td><td>86.3%</td><td>58%</td><td class="tag-green">核心件</td></tr>
+<tr><td>抽屉</td><td>1659</td><td>$7.9M</td><td>85.2%</td><td>55%</td><td class="tag-green">核心件</td></tr>
+<tr><td>脚踏板</td><td>1144</td><td>$4.9M</td><td>87.1%</td><td>50%</td><td class="tag-green">核心件</td></tr>
+<tr><td>杯架</td><td>737</td><td>$2.6M</td><td>75.7%</td><td>44%</td><td class="tag-yellow">潜力件</td></tr>
+<tr><td>隐私挡板</td><td>318</td><td>$0.96M</td><td>85%</td><td>37%</td><td class="tag-red">低效件</td></tr>
 
 </table>
-
 </div>
+
 
 </div>
 
 <script>
 
-// ===== 主销品四象限 =====
+// ===== 主销品矩阵 =====
 echarts.init(c1).setOption({
-xAxis:{name:"搭售率"},
-yAxis:{name:"搭售金额"},
+tooltip:{
+formatter:(p)=>{
+let d=p.data
+return `${p.name}<br>
+搭售率: ${d[0]}%<br>
+搭售金额: $${d[1]}<br>
+搭售销量: ${d[2]}<br>
+说明：衡量该组合价值`
+}
+},
+xAxis:{name:"搭售率 (%)"},
+yAxis:{name:"搭售金额 ($)"},
 series:[{
 type:'scatter',
 symbolSize:d=>d[2]*15,
+label:{show:true},
 data:[
 {value:[70,200,5],name:"小高台"},
-{value:[50,150,4],name:"边柜"},
+{value:[50,150,4],name:"V边柜"},
 {value:[30,80,3],name:"线缆"},
 {value:[20,40,2],name:"键盘托"}
-],
-label:{show:true},
-}],
-graphic:[
-{type:'line',shape:{x1:0,y1:200,x2:100,y2:200},style:{stroke:'#555'}},
-{type:'line',shape:{x1:50,y1:0,x2:50,y2:300},style:{stroke:'#555'}}
 ]
+}]
 })
 
 // ===== 配件四象限 =====
 echarts.init(c2).setOption({
-xAxis:{name:"搭售占比"},
-yAxis:{name:"搭售金额"},
+tooltip:{
+formatter:(p)=>{
+let d=p.data
+return `${p.name}<br>
+搭售占比: ${d[0]}%<br>
+搭售金额: $${d[1]}<br>
+搭售销量: ${d[2]}`
+}
+},
+xAxis:{name:"搭售占比 (%)"},
+yAxis:{name:"搭售金额 ($)"},
 series:[{
 type:'scatter',
-symbolSize:d=>d[2]/50,
+symbolSize:d=>d[2]/40,
+label:{show:true},
 data:[
 {value:[85,20000000,2600],name:"显示器支架"},
 {value:[86,13700000,2100],name:"理线槽"},
 {value:[85,7900000,1600],name:"抽屉"},
 {value:[75,2600000,700],name:"杯架"},
 {value:[85,960000,318],name:"隐私挡板"}
-],
-label:{show:true}
+]
 }]
 })
 
-// ===== 2.5 =====
+// ===== 分布 =====
 echarts.init(c3).setOption({
+tooltip:{trigger:'axis'},
 xAxis:{data:["整桌","L桌","行政桌","L行政"]},
 yAxis:{},
 series:[{
