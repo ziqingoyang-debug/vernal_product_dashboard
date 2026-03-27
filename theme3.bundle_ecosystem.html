@@ -1,254 +1,236 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>📊 3. 搭售生态分析</title>
+<title>Vernal 搭售生态分析</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 
 <style>
-body{
-    background:#071c34;
-    color:#fff;
-    font-family:Arial;
-    margin:0;
-}
-.container{padding:20px;}
-.card{
-    background:#0d2645;
-    padding:16px;
-    border-radius:10px;
-    margin-bottom:20px;
-}
-.row{display:flex;gap:16px;}
-.metric{
-    flex:1;
-    background:#081a33;
-    padding:16px;
-    border-radius:8px;
-}
-.chart{height:400px;}
-.big-chart{height:520px;}
-select{
-    width:100%;
-    padding:8px;
-    background:#081a33;
-    color:#fff;
-    border:1px solid #2b3f5c;
-}
+body{margin:0;font-family:-apple-system;background:#f5f7fb;color:#1f2937}
+.header{background:#0f172a;color:#fff;padding:24px}
+.container{max-width:1500px;margin:auto;padding:20px}
+
+.filters{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.filter{background:#fff;padding:12px;border-radius:10px}
+select{width:100%;padding:8px;border-radius:8px}
+
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.kpi{background:#fff;padding:18px;border-radius:12px}
+.kpi p{font-size:13px;color:#667085}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.card{background:#fff;padding:16px;border-radius:12px}
+.desc{font-size:13px;color:#667085;margin-bottom:10px;line-height:1.6}
+.chart{height:320px}
+
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #eee}
+.tag{padding:4px 10px;border-radius:20px;font-size:12px}
+.green{background:#e8f7ee;color:#117a37}
+.yellow{background:#fff6df;color:#9a6700}
+.red{background:#fdecec;color:#b42318}
 </style>
 </head>
 
 <body>
+
+<div class="header">
+<h2>Vernal 搭售生态分析看板 Demo</h2>
+<p>从主销品带货能力 + 配件被带效率双视角分析，支撑搭售优化与SKU治理。</p>
+</div>
+
 <div class="container">
 
-<h2>搭售生态分析看板</h2>
-
-<!-- 顶部筛选 -->
-<div class="card">
-国家
-<select>
-<option>All</option>
-<option>US</option>
-<option>CA</option>
-</select>
-
-销售月份
-<select>
-<option>2026-03</option>
-<option>2026-02</option>
-</select>
-</div>
-
-<!-- 一、主销品视角 -->
-<h3>一、主销品视角</h3>
-
-<div class="card">
-主销品筛选
-<select>
-<option>All</option>
-<option>v0.7一型整桌</option>
-<option>v0.7一型老板桌</option>
-<option>v0.7L型整桌</option>
-<option>v0.7L老板桌</option>
-</select>
-</div>
-
-<!-- 1.1 -->
-<div class="card">
-<h4>1.1 主销品搭售结构</h4>
-<div class="row">
-<div class="metric">主销品销量<br><b>10</b></div>
-<div class="metric">搭售销量<br><b>7</b></div>
-<div class="metric">搭售率<br><b>70%</b></div>
-<div class="metric">搭售金额<br><b>$290</b></div>
-</div>
-</div>
-
-<!-- 1.2 -->
-<div class="card">
-<h4>1.2 搭售结构分析</h4>
-<div class="row">
-<div id="c_rate" class="chart"></div>
-<div id="c_amount" class="chart"></div>
-</div>
-</div>
-
-<!-- 1.3 -->
-<div class="card">
-<h4>1.3 主销品 × 搭售件矩阵</h4>
-<div id="c_matrix" class="big-chart"></div>
-</div>
-
-<!-- 二、搭售件视角 -->
-<h3>二、搭售件视角</h3>
-
-<div class="card">
-搭售件筛选
-<select>
-<option>All</option>
+<!-- 筛选 -->
+<div class="filters">
+<div class="filter">国家<select><option>All</option><option>US</option><option>UK</option><option>DE</option></select></div>
+<div class="filter">主销品<select>
+<option>V0.7一型整桌</option>
+<option>V0.7一型老板桌</option>
+<option>V0.7L型整桌</option>
+<option>V0.7L型老板桌</option>
+</select></div>
+<div class="filter">配件<select>
 <option>小高台</option>
-<option>V边柜</option>
+<option>V系列边柜</option>
+<option>线缆挂件</option>
 <option>键盘托</option>
-<option>线缆</option>
-</select>
+</select></div>
+<div class="filter">周期<select><option>近12个月</option></select></div>
 </div>
 
-<!-- 2.1 -->
-<div class="card">
-<h4>2.1 搭售件整体能力</h4>
-<div class="row">
-<div class="metric">搭售销量<br><b>8</b></div>
-<div class="metric">单独销量<br><b>2</b></div>
-<div class="metric">搭售金额<br><b>$400</b></div>
-<div class="metric">搭售占比<br><b>53%</b></div>
+<!-- KPI -->
+<div class="kpis">
+<div class="kpi">
+<h2>1820</h2>主销品销量
+<p>衡量流量入口规模</p>
+</div>
+<div class="kpi">
+<h2>42%</h2>搭售率
+<p>主销品带出配件能力</p>
+</div>
+<div class="kpi">
+<h2>¥12.7M</h2>搭售金额
+<p>搭售带来的收入贡献</p>
 </div>
 </div>
 
-<!-- 2.2 -->
+<!-- 1+2 -->
+<div class="grid">
 <div class="card">
-<h4>2.2 主销品来源分析</h4>
-<div id="c_source" class="chart"></div>
+<h3>一、搭售率</h3>
+<div class="desc">高搭售率=强推荐能力</div>
+<div id="c1" class="chart"></div>
 </div>
 
-<!-- 2.3 -->
 <div class="card">
-<h4>2.3 搭售结构分析</h4>
-<div id="c_struct" class="chart"></div>
+<h3>二、搭售金额</h3>
+<div class="desc">识别高价值配件</div>
+<div id="c2" class="chart"></div>
+</div>
 </div>
 
-<!-- 2.4 -->
+<!-- 3+4 -->
+<div class="grid">
 <div class="card">
-<h4>2.4 配件四象限分析</h4>
-<div id="c_quad" class="big-chart"></div>
+<h3>三、站点表现</h3>
+<div class="desc">识别国家差异</div>
+<div id="c3" class="chart"></div>
 </div>
 
-<!-- 2.5 -->
 <div class="card">
-<h4>2.5 搭售金额分布</h4>
-<div id="c_dist" class="chart"></div>
+<h3>四、搭售结构</h3>
+<div class="desc">搭售 vs 单卖</div>
+<div id="c4" class="chart"></div>
+</div>
 </div>
 
-<!-- 2.6 -->
+<!-- 5 -->
 <div class="card">
-<h4>2.6 低效/潜力搭售件</h4>
-<table width="100%">
-<tr><th>配件</th><th>销量</th><th>金额</th><th>占比</th><th>毛利</th><th>标签</th></tr>
-<tr><td>显示器支架</td><td>2624</td><td>$20.1M</td><td>85%</td><td>61%</td><td style="color:#00ff9c">核心件</td></tr>
-<tr><td>隐私挡板</td><td>318</td><td>$0.96M</td><td>85%</td><td>37%</td><td style="color:red">低效件</td></tr>
+<h3>五、四象限气泡图</h3>
+<div class="desc">搭售率 × 搭售金额</div>
+<div id="c5" class="chart"></div>
+</div>
+
+<!-- 6+7 -->
+<div class="grid">
+<div class="card">
+<h3>六、配件分布</h3>
+<div class="desc">配件贡献来源</div>
+<div id="c6" class="chart"></div>
+</div>
+
+<div class="card">
+<h3>七、识别清单</h3>
+<table>
+<thead>
+<tr>
+<th>配件</th>
+<th>搭售销量</th>
+<th>搭售金额</th>
+<th>搭售占比</th>
+<th>平均毛利率</th>
+<th>标签</th>
+</tr>
+</thead>
+<tbody id="table"></tbody>
 </table>
+</div>
 </div>
 
 </div>
 
 <script>
 
-/* 延迟初始化（防空白） */
-setTimeout(()=>{
+const acc=["小高台","V系列边柜","线缆挂件","键盘托"]
 
-/* 1.2 搭售率 */
-echarts.init(c_rate).setOption({
-tooltip:{},
-xAxis:{data:['小高台','V边柜','线缆','键盘托']},
+const rate1=[45,38,25,20]
+const revenue=[5,3.8,2.5,2]
+
+const rate2=[85.9,86.3,85.2,87.1]
+const sales=[2624,2121,1659,1144]
+const margin=[61.2,58.5,55.5,50]
+
+// 图1
+echarts.init(c1).setOption({
+tooltip:{trigger:"axis"},
+xAxis:{data:acc},
 yAxis:{},
-series:[{type:'bar',data:[70,50,30,20],label:{show:true}}]
-});
+series:[{type:"line",data:rate1,label:{show:true,formatter:'{c}%'}}]
+})
 
-/* 1.2 金额 */
-echarts.init(c_amount).setOption({
-tooltip:{},
-xAxis:{data:['小高台','V边柜','线缆','键盘托']},
+// 图2
+echarts.init(c2).setOption({
+tooltip:{trigger:"axis"},
+xAxis:{data:acc},
 yAxis:{},
-series:[{type:'bar',data:[200,150,80,40],label:{show:true}}]
-});
+series:[{type:"bar",data:revenue,label:{show:true,formatter:'¥{c}M'}}]
+})
 
-/* 1.3 气泡 */
-echarts.init(c_matrix).setOption({
-tooltip:{formatter:p=>`${p.data.name}<br>率:${p.value[0]}%<br>金额:$${p.value[1]}<br>销量:${p.value[2]}`},
-xAxis:{name:'搭售率'},
-yAxis:{name:'金额'},
+// 图3
+echarts.init(c3).setOption({
+tooltip:{trigger:"axis"},
+xAxis:{data:["US","UK","DE"]},
+yAxis:{},
+series:[{type:"bar",data:[30,25,28],label:{show:true,formatter:'{c}%'}}]
+})
+
+// 图4
+echarts.init(c4).setOption({
+tooltip:{trigger:"item"},
+series:[{type:"pie",radius:['40%','70%'],data:[
+{value:80,name:"搭售"},
+{value:20,name:"单卖"}
+]}]
+})
+
+// 图5 气泡
+echarts.init(c5).setOption({
+tooltip:{
+formatter:p=>`${p.data.name}<br>搭售率:${p.data.value[0]}%<br>金额:¥${p.data.value[1]}M`
+},
+xAxis:{name:"搭售率",max:100},
+yAxis:{name:"搭售金额"},
 series:[{
-type:'scatter',
+type:"scatter",
+data:acc.map((a,i)=>({
+name:a,
+value:[rate2[i],revenue[i]],
+symbolSize:sales[i]/30
+})),
 label:{show:true,formatter:p=>p.data.name},
-symbolSize:d=>d[2]*15,
-data:[
-{name:'小高台',value:[70,200,5]},
-{name:'V边柜',value:[50,150,4]},
-{name:'线缆',value:[30,80,3]},
-{name:'键盘托',value:[20,40,2]}
-]
-}]
-});
+itemStyle:{color:"#5B7BEA"}
+}],
+markLine:{silent:true,data:[{xAxis:50},{yAxis:3}]}
+})
 
-/* 2.2 来源 */
-echarts.init(c_source).setOption({
-tooltip:{},
-xAxis:{data:['整桌','L桌','行政桌']},
+// 图6
+echarts.init(c6).setOption({
+tooltip:{trigger:"axis"},
+xAxis:{data:["一型整桌","老板桌","L整桌","L老板桌"]},
 yAxis:{},
-series:[{type:'bar',data:[5,3,2],label:{show:true}}]
-});
+series:[{type:"bar",data:[5,4.3,5.6,5.2],label:{show:true,formatter:'¥{c}M'}}]
+})
 
-/* 2.3 结构 */
-echarts.init(c_struct).setOption({
-tooltip:{},
-series:[{
-type:'pie',
-radius:['40%','70%'],
-data:[
-{name:'搭售',value:53},
-{name:'单独',value:47}
-]
-}]
-});
+// 表
+table.innerHTML=acc.map((a,i)=>{
+let tag="低效件",cls="red"
 
-/* 2.4 四象限 */
-echarts.init(c_quad).setOption({
-tooltip:{formatter:p=>`${p.data.name}<br>占比:${p.value[0]}%<br>金额:$${p.value[1]}<br>销量:${p.value[2]}`},
-xAxis:{name:'占比'},
-yAxis:{name:'金额'},
-series:[{
-type:'scatter',
-label:{show:true,formatter:p=>p.data.name},
-symbolSize:d=>d[2]/20,
-data:[
-{name:'显示器支架',value:[85,20000000,2600]},
-{name:'理线槽',value:[86,13700000,2100]},
-{name:'抽屉',value:[85,7900000,1600]},
-{name:'脚踏板',value:[87,4900000,1100]},
-{name:'杯架',value:[75,2600000,700]},
-{name:'隐私挡板',value:[85,960000,318]}
-]
-}]
-});
+if(rate2[i]>80 && revenue[i]>3){
+tag="核心件";cls="green"
+}else if(rate2[i]<80 && revenue[i]>3){
+tag="潜力件";cls="yellow"
+}
 
-/* 2.5 分布 */
-echarts.init(c_dist).setOption({
-tooltip:{formatter:p=>`$${p.value}`},
-xAxis:{data:['整桌','L桌','行政桌','L行政桌']},
-yAxis:{},
-series:[{type:'bar',data:[5000000,4300000,5600000,5200000],label:{show:true}}]
-});
-
-},500);
+return `<tr>
+<td>${a}</td>
+<td>${sales[i]}</td>
+<td>¥${revenue[i]}M</td>
+<td>${rate2[i]}%</td>
+<td>${margin[i]}%</td>
+<td><span class="tag ${cls}">${tag}</span></td>
+</tr>`
+}).join("")
 
 </script>
 
