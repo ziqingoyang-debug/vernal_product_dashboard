@@ -6,30 +6,37 @@
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 
 <style>
-body{margin:0;font-family:-apple-system;background:#f5f7fb}
-.header{background:#0f172a;color:#fff;padding:24px}
+body{margin:0;font-family:-apple-system;background:#f5f7fb;color:#1f2937}
+.header{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:28px}
 .container{max-width:1400px;margin:auto;padding:20px}
-
-.filters{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.filter{background:#fff;padding:12px;border-radius:10px}
-select{width:100%;padding:8px;border-radius:8px}
-
-.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
-.kpi{background:#fff;padding:18px;border-radius:12px}
-.kpi p{font-size:13px;color:#667085}
-
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
-.card{background:#fff;padding:16px;border-radius:12px}
-.chart{height:320px}
 
 .home-btn{
 margin-top:10px;
-padding:6px 12px;
+padding:6px 14px;
 border:none;
 border-radius:6px;
 background:#fff;
 cursor:pointer;
 }
+
+/* 筛选器 */
+.filters{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.filter{background:#fff;padding:14px;border-radius:12px}
+select{width:100%;padding:8px;border-radius:8px}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
+.kpi{background:#fff;padding:18px;border-radius:14px}
+.kpi .value{font-size:28px;font-weight:bold;margin-bottom:6px}
+.kpi .desc{font-size:13px;color:#667085;line-height:1.6}
+
+/* 卡片 */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.card{background:#fff;padding:16px;border-radius:14px}
+.card h3{margin:0 0 6px}
+.desc{font-size:13px;color:#667085;line-height:1.6;margin-bottom:10px}
+
+.chart{height:320px}
 </style>
 </head>
 
@@ -37,11 +44,10 @@ cursor:pointer;
 
 <div class="header">
 <h2>用户体验分析看板</h2>
-
 <button class="home-btn" onclick="goHome()">← 返回首页</button>
-
 <p>
-基于评论与客诉数据，从“差评问题”与“用户亮点反馈”双视角评估产品体验。
+基于评论（Review）与客诉（Ticket）数据，识别产品体验问题与用户感知亮点，
+用于支撑产品优化与卖点验证。
 </p>
 </div>
 
@@ -57,59 +63,92 @@ cursor:pointer;
 
 <!-- KPI -->
 <div class="kpis">
+
 <div class="kpi">
-<h2>0.18%</h2>
-差评率
-<p>1-3星订单占比，反映产品基础体验问题</p>
+<div class="value">0.18%</div>
+<strong>差评率</strong>
+<div class="desc">
+定义：1-3星订单数 / 总订单数<br>
+目的：衡量产品基础体验是否存在明显问题<br>
+解读：值越低说明产品质量越稳定
+</div>
 </div>
 
 <div class="kpi">
-<h2>0.25%</h2>
-客诉率
-<p>客服反馈问题占比，反映用户使用过程问题</p>
+<div class="value">0.25%</div>
+<strong>客诉率</strong>
+<div class="desc">
+定义：客诉订单数 / 总订单数<br>
+目的：衡量用户使用过程中是否遇到问题<br>
+解读：高客诉率通常意味着履约或安装问题
+</div>
 </div>
 
 <div class="kpi">
-<h2>12.3%</h2>
-MOT提及率
-<p>用户主动提及亮点比例，验证产品卖点是否成立</p>
+<div class="value">12.3%</div>
+<strong>MOT提及率</strong>
+<div class="desc">
+定义：提及产品亮点的评论数 / 总评论数<br>
+目的：验证产品卖点是否被用户真实感知<br>
+解读：值越高说明卖点成立
 </div>
+</div>
+
 </div>
 
 <!-- 趋势 -->
 <div class="grid">
+
 <div class="card">
-<h3>差评率趋势</h3>
-<p>观察质量问题是否改善</p>
+<h3>一、差评率趋势</h3>
+<div class="desc">
+目的：观察质量问题是否持续改善<br>
+看法：持续下降 → 产品质量优化有效；异常上升 → 需排查问题批次
+</div>
 <div id="c1" class="chart"></div>
 </div>
 
 <div class="card">
-<h3>客诉率趋势</h3>
-<p>观察用户使用问题变化</p>
+<h3>二、客诉率趋势</h3>
+<div class="desc">
+目的：观察用户使用问题变化<br>
+看法：高客诉率但低差评 → 说明服务或物流问题更突出
+</div>
 <div id="c2" class="chart"></div>
 </div>
+
 </div>
 
 <!-- 结构 -->
 <div class="grid">
+
 <div class="card">
-<h3>差评问题结构</h3>
-<p>识别核心质量问题</p>
+<h3>三、差评问题结构</h3>
+<div class="desc">
+目的：识别核心质量问题类型<br>
+看法：功能/结构问题占比高 → 产品本身问题；包装问题 → 履约问题
+</div>
 <div id="c3" class="chart"></div>
 </div>
 
 <div class="card">
-<h3>客诉问题结构</h3>
-<p>识别用户投诉来源</p>
+<h3>四、客诉问题结构</h3>
+<div class="desc">
+目的：识别用户投诉来源<br>
+看法：物流/缺件占比高 → 供应链问题；安装问题 → 说明书或设计问题
+</div>
 <div id="c4" class="chart"></div>
 </div>
+
 </div>
 
 <!-- MOT -->
 <div class="card">
-<h3>MOT亮点分析</h3>
-<p>用户主动提及的产品优势</p>
+<h3>五、MOT亮点分析</h3>
+<div class="desc">
+目的：验证产品卖点是否成立<br>
+看法：高频亮点 = 核心卖点；未被提及的卖点 = 无效卖点
+</div>
 <div id="c5" class="chart"></div>
 </div>
 
@@ -117,7 +156,6 @@ MOT提及率
 
 <script>
 
-// 返回首页
 function goHome(){
   window.location.href="index.html"
 }
@@ -151,6 +189,7 @@ echarts.init(c3).setOption({
 tooltip:{trigger:'item'},
 series:[{
 type:"pie",
+radius:['40%','70%'],
 data:[
 {value:40,name:"功能"},
 {value:25,name:"包装"},
@@ -165,6 +204,7 @@ echarts.init(c4).setOption({
 tooltip:{trigger:'item'},
 series:[{
 type:"pie",
+radius:['40%','70%'],
 data:[
 {value:35,name:"物流"},
 {value:30,name:"缺件"},
