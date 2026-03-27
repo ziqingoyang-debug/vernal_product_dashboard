@@ -56,9 +56,9 @@ select{width:100%;padding:8px;border-radius:8px}
 <!-- 筛选 -->
 <div class="filters">
 <div class="filter">国家<select><option>All</option><option>US</option><option>UK</option><option>DE</option></select></div>
-<div class="filter">产品<select><option>V0.7一型整桌</option><option>V0.7L型整桌</option></select></div>
-<div class="filter">SKU<select><option>全部</option></select></div>
-<div class="filter">周期<select><option>近6个月</option></select></div>
+<div class="filter">产品<select><option>All</option><option>V0.7一型整桌</option><option>V0.7L型整桌</option></select></div>
+<div class="filter">SKU<select><option>All</option></select></div>
+<div class="filter">销售月份<select><option>2026-03</option></select></div>
 </div>
 
 <!-- KPI -->
@@ -66,11 +66,12 @@ select{width:100%;padding:8px;border-radius:8px}
 
 <div class="kpi">
 <div class="value">0.18%</div>
-<strong>差评率</strong>
+<strong>订单差评率</strong>
 <div class="desc">
 定义：1-3星订单数 / 总订单数<br>
-目的：衡量产品基础体验是否存在明显问题<br>
+目的：衡量产品基础体验是否存在明显问题，“品质感”VOC来源之一<br>
 解读：值越低说明产品质量越稳定
+数据说明：仅考虑“不值这个价（已有评论标签：性价比）”、“看起来很廉价（已有评论标签：做工差）”、“手感不好（未有评论标签）”、“不稳定（已有评论标签：稳定性差）”、“以后不会再买（已有评论标签：不值得被推荐）”、模糊语义“很垃圾（未有评论标签）”相关标签（未定）
 </div>
 </div>
 
@@ -79,8 +80,9 @@ select{width:100%;padding:8px;border-radius:8px}
 <strong>客诉率</strong>
 <div class="desc">
 定义：客诉订单数 / 总订单数<br>
-目的：衡量用户使用过程中是否遇到问题<br>
-解读：高客诉率通常意味着履约或安装问题
+目的：衡量用户使用过程中是否遇到问题，“品质感”VOC来源之一<br>
+解读：相关高客诉率意味存在“品质感”问题
+数据说明：仅考虑与“品质感”相关的客诉标签
 </div>
 </div>
 
@@ -100,10 +102,10 @@ select{width:100%;padding:8px;border-radius:8px}
 <div class="grid">
 
 <div class="card">
-<h3>一、差评率趋势</h3>
+<h3>一、订单差评率趋势</h3>
 <div class="desc">
-目的：观察质量问题是否持续改善<br>
-看法：持续下降 → 产品质量优化有效；异常上升 → 需排查问题批次
+目的：观察基础体验问题是否持续改善<br>
+看法：持续下降 → 用户体验优化有效；异常上升 → 需排查问题批次
 </div>
 <div id="c1" class="chart"></div>
 </div>
@@ -112,7 +114,7 @@ select{width:100%;padding:8px;border-radius:8px}
 <h3>二、客诉率趋势</h3>
 <div class="desc">
 目的：观察用户使用问题变化<br>
-看法：高客诉率但低差评 → 说明服务或物流问题更突出
+看法：与订单差评率趋势同理
 </div>
 <div id="c2" class="chart"></div>
 </div>
@@ -123,7 +125,7 @@ select{width:100%;padding:8px;border-radius:8px}
 <div class="grid">
 
 <div class="card">
-<h3>三、差评问题结构</h3>
+<h3>三、订单差评问题结构</h3>
 <div class="desc">
 目的：识别核心质量问题类型<br>
 看法：功能/结构问题占比高 → 产品本身问题；包装问题 → 履约问题
@@ -134,8 +136,8 @@ select{width:100%;padding:8px;border-radius:8px}
 <div class="card">
 <h3>四、客诉问题结构</h3>
 <div class="desc">
-目的：识别用户投诉来源<br>
-看法：物流/缺件占比高 → 供应链问题；安装问题 → 说明书或设计问题
+目的：识别用户客诉来源<br>
+看法：功能占比高 → 产品设计问题；外观问题 → 审美相关
 </div>
 <div id="c4" class="chart"></div>
 </div>
@@ -160,7 +162,7 @@ function goHome(){
   window.location.href="index.html"
 }
 
-// 差评趋势
+// 订单差评趋势
 echarts.init(c1).setOption({
 tooltip:{trigger:'axis'},
 xAxis:{data:["10月","11月","12月","1月","2月"]},
@@ -184,17 +186,17 @@ label:{show:true,formatter:'{c}%'}
 }]
 })
 
-// 差评结构
+// 订单差评结构
 echarts.init(c3).setOption({
 tooltip:{trigger:'item'},
 series:[{
 type:"pie",
 radius:['40%','70%'],
 data:[
-{value:40,name:"功能"},
-{value:25,name:"包装"},
-{value:20,name:"材质"},
-{value:15,name:"外观"}
+{value:40,name:"性价比"},
+{value:25,name:"做工差"},
+{value:20,name:"不稳定"},
+{value:15,name:"以后不会再买"}
 ]
 }]
 })
@@ -206,10 +208,10 @@ series:[{
 type:"pie",
 radius:['40%','70%'],
 data:[
-{value:35,name:"物流"},
-{value:30,name:"缺件"},
-{value:20,name:"安装"},
-{value:15,name:"服务"}
+{value:35,name:"功能"},
+{value:30,name:"包装"},
+{value:20,name:"材质"},
+{value:15,name:"结构"}
 ]
 }]
 })
@@ -217,7 +219,7 @@ data:[
 // MOT
 echarts.init(c5).setOption({
 tooltip:{trigger:'axis'},
-xAxis:{data:["稳定","升降顺滑","外观好","性价比"]},
+xAxis:{data:["快装","外观好看","科技感","高级"]},
 yAxis:{},
 series:[{
 type:"bar",
