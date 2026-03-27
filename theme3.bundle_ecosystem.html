@@ -2,235 +2,287 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>Vernal 搭售生态分析</title>
+<title>📊 3. 搭售生态分析</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 
 <style>
-body{margin:0;font-family:-apple-system;background:#f5f7fb;color:#1f2937}
-.header{background:#0f172a;color:#fff;padding:24px}
-.container{max-width:1500px;margin:auto;padding:20px}
+body{margin:0;font-family:-apple-system;background:#0b1220;color:#e5e7eb}
+.header{background:linear-gradient(135deg,#020617,#0f172a);padding:28px}
+.container{max-width:1400px;margin:auto;padding:20px}
 
-.filters{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-.filter{background:#fff;padding:12px;border-radius:10px}
-select{width:100%;padding:8px;border-radius:8px}
+.home-btn{margin-top:10px;padding:8px 14px;border-radius:8px;border:none;background:#fff;cursor:pointer}
 
+/* 筛选 */
+.filters{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px}
+.filter{background:#111827;padding:12px;border-radius:10px}
+select{width:100%;background:#020617;color:#fff;padding:6px;border-radius:6px;border:1px solid #334155}
+
+/* KPI */
 .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
-.kpi{background:#fff;padding:18px;border-radius:12px}
-.kpi p{font-size:13px;color:#667085}
+.kpi{background:#020617;padding:16px;border-radius:10px}
+.value{font-size:24px;font-weight:bold}
+.desc{font-size:12px;color:#94a3b8;margin-top:6px;line-height:1.5}
 
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
-.card{background:#fff;padding:16px;border-radius:12px}
-.desc{font-size:13px;color:#667085;margin-bottom:10px;line-height:1.6}
+/* 卡片 */
+.card{background:#111827;padding:16px;border-radius:12px;margin-bottom:20px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .chart{height:320px}
-
-table{width:100%;border-collapse:collapse}
-th,td{padding:10px;border-bottom:1px solid #eee}
-.tag{padding:4px 10px;border-radius:20px;font-size:12px}
-.green{background:#e8f7ee;color:#117a37}
-.yellow{background:#fff6df;color:#9a6700}
-.red{background:#fdecec;color:#b42318}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-<h2>Vernal 搭售生态分析看板 Demo</h2>
-<p>从主销品带货能力 + 配件被带效率双视角分析，支撑搭售优化与SKU治理。</p>
+<h2>搭售生态分析看板</h2>
+<button class="home-btn" onclick="goHome()">← 返回首页</button>
+<p>基于主销品输出能力与配件承接能力的双视角分析</p>
 </div>
 
 <div class="container">
 
-<!-- 筛选 -->
+<!-- 顶部筛选 -->
 <div class="filters">
-<div class="filter">国家<select><option>All</option><option>US</option><option>UK</option><option>DE</option></select></div>
-<div class="filter">主销品<select>
-<option>V0.7一型整桌</option>
-<option>V0.7一型老板桌</option>
-<option>V0.7L型整桌</option>
-<option>V0.7L型老板桌</option>
-</select></div>
-<div class="filter">配件<select>
-<option>小高台</option>
-<option>V系列边柜</option>
-<option>线缆挂件</option>
-<option>键盘托</option>
-</select></div>
-<div class="filter">周期<select><option>近12个月</option></select></div>
+<div class="filter">国家<select><option>All</option><option>US</option></select></div>
+<div class="filter">销售月份<select><option>2026-03</option></select></div>
+</div>
+
+<!-- ================= 主销品视角 ================= -->
+
+<div class="card">
+<h3>一、主销品视角</h3>
+<div class="desc">筛选主销品（支持多选）</div>
+
+<div class="filter">
+<select>
+<option>All</option>
+<option>v0.7一型整桌</option>
+<option>v0.7一型老板桌</option>
+<option>v0.7L型整桌</option>
+</select>
+</div>
 </div>
 
 <!-- KPI -->
+<div class="card">
+<h3>1.1 整体搭售能力</h3>
+
 <div class="kpis">
+
 <div class="kpi">
-<h2>1820</h2>主销品销量
-<p>衡量流量入口规模</p>
-</div>
-<div class="kpi">
-<h2>42%</h2>搭售率
-<p>主销品带出配件能力</p>
-</div>
-<div class="kpi">
-<h2>¥12.7M</h2>搭售金额
-<p>搭售带来的收入贡献</p>
+<div class="value">10</div>
+主销品销量
+<div class="desc">
+目的：衡量主销品销售规模<br>
+公式：订单数
 </div>
 </div>
 
-<!-- 1+2 -->
+<div class="kpi">
+<div class="value">70%</div>
+搭售率
+<div class="desc">
+目的：评估带出能力<br>
+公式：搭售销量 / 主销品销量
+</div>
+</div>
+
+<div class="kpi">
+<div class="value">$290</div>
+搭售金额
+<div class="desc">
+目的：评估带来的收入<br>
+公式：搭售订单产生的收入
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- 结构 -->
 <div class="grid">
+
 <div class="card">
-<h3>一、搭售率</h3>
-<div class="desc">高搭售率=强推荐能力</div>
+<h3>1.2 不同配件搭售率</h3>
 <div id="c1" class="chart"></div>
 </div>
 
 <div class="card">
-<h3>二、搭售金额</h3>
-<div class="desc">识别高价值配件</div>
+<h3>不同配件搭售金额（单位：$）</h3>
 <div id="c2" class="chart"></div>
 </div>
+
 </div>
 
-<!-- 3+4 -->
-<div class="grid">
+<!-- 1.3 气泡图 -->
 <div class="card">
-<h3>三、站点表现</h3>
-<div class="desc">识别国家差异</div>
+<h3>1.3 主销品 × 搭售件矩阵</h3>
+<div class="desc">
+目的：识别高价值组合<br>
+横轴：搭售率，纵轴：金额<br>
+气泡大小：搭售销量
+</div>
 <div id="c3" class="chart"></div>
 </div>
 
+<!-- ================= 配件视角 ================= -->
+
 <div class="card">
-<h3>四、搭售结构</h3>
-<div class="desc">搭售 vs 单卖</div>
-<div id="c4" class="chart"></div>
+<h3>二、搭售件视角</h3>
+<div class="desc">筛选搭售件（支持多选）</div>
+
+<select>
+<option>All</option>
+<option>小高台</option>
+<option>边柜</option>
+<option>线缆</option>
+<option>键盘托</option>
+</select>
+</div>
+
+<!-- KPI -->
+<div class="card">
+<h3>2.1 搭售整体能力</h3>
+
+<div class="kpis">
+
+<div class="kpi">
+<div class="value">8</div>
+搭售销量
+<div class="desc">
+目的：评估被带出次数<br>
+公式：搭售订单数量
 </div>
 </div>
 
-<!-- 5 -->
+<div class="kpi">
+<div class="value">$400</div>
+搭售金额
+<div class="desc">
+目的：评估收入贡献<br>
+公式：搭售收入
+</div>
+</div>
+
+<div class="kpi">
+<div class="value">53%</div>
+搭售占比
+<div class="desc">
+目的：评估依赖程度<br>
+公式：搭售销量 / 总销量
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- 来源 + 结构 -->
+<div class="grid">
+
 <div class="card">
-<h3>五、四象限气泡图</h3>
-<div class="desc">搭售率 × 搭售金额</div>
+<h3>2.2 主销品来源分析</h3>
+<div id="c4" class="chart"></div>
+</div>
+
+<div class="card">
+<h3>2.3 搭售结构</h3>
 <div id="c5" class="chart"></div>
 </div>
 
-<!-- 6+7 -->
-<div class="grid">
-<div class="card">
-<h3>六、配件分布</h3>
-<div class="desc">配件贡献来源</div>
-<div id="c6" class="chart"></div>
 </div>
 
+<!-- 四象限 -->
 <div class="card">
-<h3>七、识别清单</h3>
-<table>
-<thead>
-<tr>
-<th>配件</th>
-<th>搭售销量</th>
-<th>搭售金额</th>
-<th>搭售占比</th>
-<th>平均毛利率</th>
-<th>标签</th>
-</tr>
-</thead>
-<tbody id="table"></tbody>
-</table>
+<h3>2.4 搭售件分层（四象限）</h3>
+<div class="desc">
+气泡大小 = 搭售销量<br>
+横轴 = 搭售率<br>
+纵轴 = 搭售金额
 </div>
+<div id="c6" class="chart"></div>
 </div>
 
 </div>
 
 <script>
 
-const acc=["小高台","V系列边柜","线缆挂件","键盘托"]
+function goHome(){window.location.href="index.html"}
 
-const rate1=[45,38,25,20]
-const revenue=[5,3.8,2.5,2]
+const acc=["小高台","V边柜","线缆","键盘托"]
 
-const rate2=[85.9,86.3,85.2,87.1]
-const sales=[2624,2121,1659,1144]
-const margin=[61.2,58.5,55.5,50]
-
-// 图1
+// 搭售率
 echarts.init(c1).setOption({
-tooltip:{trigger:"axis"},
 xAxis:{data:acc},
 yAxis:{},
-series:[{type:"line",data:rate1,label:{show:true,formatter:'{c}%'}}]
+series:[{type:"bar",data:[70,50,30,20],label:{show:true,formatter:'{c}%'}}]
 })
 
-// 图2
+// 金额
 echarts.init(c2).setOption({
-tooltip:{trigger:"axis"},
 xAxis:{data:acc},
 yAxis:{},
-series:[{type:"bar",data:revenue,label:{show:true,formatter:'¥{c}M'}}]
+series:[{type:"bar",data:[200,150,80,40],label:{show:true}}]
 })
 
-// 图3
+// 气泡图1
 echarts.init(c3).setOption({
-tooltip:{trigger:"axis"},
-xAxis:{data:["US","UK","DE"]},
-yAxis:{},
-series:[{type:"bar",data:[30,25,28],label:{show:true,formatter:'{c}%'}}]
-})
-
-// 图4
-echarts.init(c4).setOption({
-tooltip:{trigger:"item"},
-series:[{type:"pie",radius:['40%','70%'],data:[
-{value:80,name:"搭售"},
-{value:20,name:"单卖"}
-]}]
-})
-
-// 图5 气泡
-echarts.init(c5).setOption({
-tooltip:{
-formatter:p=>`${p.data.name}<br>搭售率:${p.data.value[0]}%<br>金额:¥${p.data.value[1]}M`
-},
-xAxis:{name:"搭售率",max:100},
-yAxis:{name:"搭售金额"},
+tooltip:{formatter:p=>`${p.name}<br/>率:${p.value[0]}%<br/>金额:$${p.value[1]}`},
+xAxis:{name:"搭售率"},
+yAxis:{name:"金额"},
 series:[{
-type:"scatter",
-data:acc.map((a,i)=>({
-name:a,
-value:[rate2[i],revenue[i]],
-symbolSize:sales[i]/30
-})),
-label:{show:true,formatter:p=>p.data.name},
-itemStyle:{color:"#5B7BEA"}
-}],
-markLine:{silent:true,data:[{xAxis:50},{yAxis:3}]}
+type:'scatter',
+symbolSize:(d)=>d[2]*5,
+data:[
+{value:[70,200,5],name:"小高台"},
+{value:[50,150,4],name:"边柜"},
+{value:[30,80,3],name:"线缆"},
+{value:[20,40,2],name:"键盘托"}
+],
+label:{show:true}
+}]
 })
 
-// 图6
-echarts.init(c6).setOption({
-tooltip:{trigger:"axis"},
-xAxis:{data:["一型整桌","老板桌","L整桌","L老板桌"]},
+// 来源（横轴修正）
+echarts.init(c4).setOption({
+xAxis:{data:[
+"v0.7一型整桌",
+"v0.7一型老板桌",
+"v0.7L型整桌",
+"v0.7L型老板桌"
+]},
 yAxis:{},
-series:[{type:"bar",data:[5,4.3,5.6,5.2],label:{show:true,formatter:'¥{c}M'}}]
+series:[{type:"bar",data:[5,3,2,1],label:{show:true}}]
 })
 
-// 表
-table.innerHTML=acc.map((a,i)=>{
-let tag="低效件",cls="red"
+// 结构
+echarts.init(c5).setOption({
+series:[{
+type:"pie",
+radius:['40%','70%'],
+data:[
+{value:53,name:"搭售"},
+{value:47,name:"单独"}
+],
+label:{formatter:'{b}:{d}%'}
+}]
+})
 
-if(rate2[i]>80 && revenue[i]>3){
-tag="核心件";cls="green"
-}else if(rate2[i]<80 && revenue[i]>3){
-tag="潜力件";cls="yellow"
-}
-
-return `<tr>
-<td>${a}</td>
-<td>${sales[i]}</td>
-<td>¥${revenue[i]}M</td>
-<td>${rate2[i]}%</td>
-<td>${margin[i]}%</td>
-<td><span class="tag ${cls}">${tag}</span></td>
-</tr>`
-}).join("")
+// 四象限气泡
+echarts.init(c6).setOption({
+tooltip:{formatter:p=>`${p.name}<br/>率:${p.value[0]}%<br/>金额:$${p.value[1]}`},
+xAxis:{name:"搭售率"},
+yAxis:{name:"金额"},
+series:[{
+type:'scatter',
+symbolSize:(d)=>d[2]*5,
+data:[
+{value:[70,200,5],name:"核心件"},
+{value:[50,150,4],name:"潜力件"},
+{value:[30,80,3],name:"普通件"},
+{value:[20,40,2],name:"低效件"}
+],
+label:{show:true}
+}]
+})
 
 </script>
 
