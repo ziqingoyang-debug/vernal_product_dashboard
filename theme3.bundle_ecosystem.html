@@ -155,11 +155,124 @@ th{background:#1f2937}
 
   </div>
 
-  <!-- 1.3 气泡 -->
+  <!-- 1.3：替换为结构分析 -->
   <div class="card">
-    <h3>1.3 主销品 × 搭售件矩阵</h3>
-    <div class="desc">气泡大小 = 搭售销量</div>
+    <h3>1.3 结构分析：主销品 × 搭售件矩阵</h3>
+    <div class="desc">
+      看什么：一个主销品下，不同搭售件的组合表现。<br>
+      怎么看：横轴看组合搭售率，纵轴看组合搭售金额，气泡大小看组合搭售销量。<br>
+      判断：高频组合看组合搭售销量 / 搭售率，高价值组合看组合搭售金额，低频且低价值组合可视为无效组合。
+    </div>
     <div id="c3" style="height:420px"></div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>1.3 组合识别结果</h3>
+      <div class="desc">
+        组合搭售销量 = 该主销品带出该搭售件的销量<br>
+        组合搭售率 = 组合搭售销量 / 主销品销量<br>
+        组合搭售金额 = 组合搭售销量 × 配件单价
+      </div>
+
+      <table>
+        <tr>
+          <th>组合</th>
+          <th>搭售销量</th>
+          <th>搭售率</th>
+          <th>单价</th>
+          <th>搭售金额</th>
+          <th>标签</th>
+        </tr>
+        <tr>
+          <td>v0.7一型整桌 × V系列边柜</td>
+          <td>5</td>
+          <td>50%</td>
+          <td>$50</td>
+          <td>$250</td>
+          <td style="color:#22c55e">高频 + 高价值</td>
+        </tr>
+        <tr>
+          <td>v0.7一型整桌 × 小高台</td>
+          <td>2</td>
+          <td>20%</td>
+          <td>$20</td>
+          <td>$40</td>
+          <td style="color:#f59e0b">常见搭配</td>
+        </tr>
+        <tr>
+          <td>v0.7一型整桌 × 线缆</td>
+          <td>1</td>
+          <td>10%</td>
+          <td>$30</td>
+          <td>$30</td>
+          <td style="color:#ef4444">低频低价值</td>
+        </tr>
+        <tr>
+          <td>v0.7一型整桌 × 键盘托</td>
+          <td>1</td>
+          <td>10%</td>
+          <td>$20</td>
+          <td>$20</td>
+          <td style="color:#ef4444">低频低价值</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>1.4 主销品分层定位</h3>
+      <div class="desc">
+        看什么：主销品整体销量与整体搭售率。<br>
+        怎么看：横轴看主销品销量，纵轴看主销品整体搭售率。<br>
+        解释：销量代表流量规模，搭售率代表转化能力。<br>
+        当前阈值：高销量 ≥ 70，高搭售率 ≥ 50%。
+      </div>
+      <div id="c12" class="chart"></div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <h3>1.4 分层定位结果</h3>
+    <div class="desc">
+      主销品整体搭售率 = 该主销品带出的搭售总销量 / 该主销品销量
+    </div>
+
+    <table>
+      <tr>
+        <th>主销品</th>
+        <th>销量</th>
+        <th>搭售总量</th>
+        <th>整体搭售率</th>
+        <th>分层</th>
+        <th>业务含义</th>
+      </tr>
+      <tr>
+        <td>v0.7一型整桌</td>
+        <td>120</td>
+        <td>72</td>
+        <td>60%</td>
+        <td>高销量 × 高搭售率</td>
+        <td>优质入口</td>
+      </tr>
+      <tr>
+        <td>v0.7L型整桌</td>
+        <td>150</td>
+        <td>45</td>
+        <td>30%</td>
+        <td>高销量 × 低搭售率</td>
+        <td>优化重点</td>
+      </tr>
+      <tr>
+        <td>v0.7一型行政桌</td>
+        <td>40</td>
+        <td>24</td>
+        <td>60%</td>
+        <td>低销量 × 高搭售率</td>
+        <td>潜力产品</td>
+      </tr>
+    </table>
   </div>
 
 
@@ -350,6 +463,7 @@ const c8 = document.getElementById('c8');
 const c9 = document.getElementById('c9');
 const c10 = document.getElementById('c10');
 const c11 = document.getElementById('c11');
+const c12 = document.getElementById('c12');
 const selectedAccessory = document.getElementById('selectedAccessory');
 
 const acc = ["小高台","V边柜","线缆","键盘托"];
@@ -385,6 +499,20 @@ const sourceProductSeriesAmount = {
   "v0.7一型行政桌": [0.4,0.5,0.6,0.7,0.9,1.0,1.1,1.2,1.4],
   "v0.7L型行政桌": [0.2,0.3,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
 };
+
+// 新增：1.3 结构分析与 1.4 分层定位数据
+const comboMatrixData = [
+  {name:"V系列边柜", value:[50,250,5,50], tag:"高频 + 高价值"},
+  {name:"小高台", value:[20,40,2,20], tag:"常见搭配"},
+  {name:"线缆", value:[10,30,1,30], tag:"低频低价值"},
+  {name:"键盘托", value:[10,20,1,20], tag:"低频低价值"}
+];
+
+const productLayeringData = [
+  {name:"v0.7一型整桌", value:[120,60,72], tag:"优质入口"},
+  {name:"v0.7L型整桌", value:[150,30,45], tag:"优化重点"},
+  {name:"v0.7一型行政桌", value:[40,60,24], tag:"潜力产品"}
+];
 
 // 统一颜色/样式
 const axisCommon = {
@@ -555,50 +683,96 @@ function renderAccessoryDrillCharts() {
 selectedAccessory.addEventListener('change', renderAccessoryDrillCharts);
 renderAccessoryDrillCharts();
 
-// 1.3 气泡（主销品）
-// 改动：气泡内显示名称；横纵轴补充标签；tooltip 显示全部信息
+// 1.3 结构分析：主销品 × 搭售件矩阵
 echarts.init(c3).setOption({
   backgroundColor:'transparent',
   tooltip:{
     trigger:'item',
     formatter:function(p){
-      return `${p.name}<br/>搭售率：${p.value[0]}%<br/>搭售金额：$${p.value[1]}<br/>搭售销量：${p.value[2]}`;
+      return `组合：v0.7一型整桌 × ${p.name}<br/>组合搭售销量：${p.value[2]}<br/>组合搭售率：${p.value[0]}%<br/>配件单价：$${p.value[3]}<br/>组合搭售金额：$${p.value[1]}<br/>判断：${p.data.tag}`;
     }
   },
   grid:{left:70,right:35,top:50,bottom:65},
   xAxis:{
     type:'value',
-    name:'搭售率(%)',
+    name:'组合搭售率(%)',
     nameLocation:'middle',
     nameGap:35,
     min:0,
-    max:80,
+    max:60,
     ...axisCommon
   },
   yAxis:{
     type:'value',
-    name:'搭售金额($)',
+    name:'组合搭售金额($)',
     nameLocation:'middle',
-    nameGap:50,
+    nameGap:55,
     min:0,
-    max:220,
+    max:280,
     ...axisCommon
   },
   series:[{
     type:'scatter',
-    symbolSize:function(d){ return d[2] * 10; },
-    data:[
-      {value:[70,200,5],name:"小高台"},
-      {value:[50,150,4],name:"边柜"},
-      {value:[30,80,3],name:"线缆"},
-      {value:[20,40,2],name:"键盘托"}
-    ],
+    symbolSize:function(d){ return d[2] * 22; },
+    data:comboMatrixData,
     itemStyle:{color:'rgba(109,141,247,0.82)'},
     label:{
       show:true,
       formatter:function(p){ return p.name; },
       color:'#e5e7eb',
       fontSize:14
+    },
+    emphasis:{focus:'series'}
+  }]
+});
+
+// 1.4 主销品分层定位
+echarts.init(c12).setOption({
+  backgroundColor:'transparent',
+  tooltip:{
+    trigger:'item',
+    formatter:function(p){
+      return `主销品：${p.name}<br/>销量：${p.value[0]}<br/>搭售总量：${p.value[2]}<br/>整体搭售率：${p.value[1]}%<br/>分层：${p.data.tag}`;
+    }
+  },
+  grid:{left:70,right:35,top:50,bottom:65},
+  xAxis:{
+    type:'value',
+    name:'主销品销量',
+    nameLocation:'middle',
+    nameGap:35,
+    min:0,
+    max:180,
+    ...axisCommon
+  },
+  yAxis:{
+    type:'value',
+    name:'整体搭售率(%)',
+    nameLocation:'middle',
+    nameGap:50,
+    min:0,
+    max:80,
+    ...axisCommon
+  },
+  series:[{
+    type:'scatter',
+    symbolSize:26,
+    data:productLayeringData,
+    itemStyle:{color:'rgba(109,141,247,0.82)'},
+    label:{
+      show:true,
+      formatter:function(p){ return p.name; },
+      color:'#e5e7eb',
+      fontSize:13
+    },
+    markLine:{
+      silent:true,
+      symbol:['none','none'],
+      lineStyle:{type:'dashed',color:'#94a3b8'},
+      data:[
+        {xAxis:70},
+        {yAxis:50}
+      ]
     },
     emphasis:{focus:'series'}
   }]
@@ -872,6 +1046,7 @@ window.addEventListener('resize', function(){
   echarts.getInstanceByDom(c9)?.resize();
   echarts.getInstanceByDom(c10)?.resize();
   echarts.getInstanceByDom(c11)?.resize();
+  echarts.getInstanceByDom(c12)?.resize();
 });
 </script>
 
