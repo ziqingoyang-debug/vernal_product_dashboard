@@ -53,7 +53,7 @@ th{background:#1f2937}
 <div class="header">
   <h2>搭售生态分析看板</h2>
   <button class="home-btn" onclick="goHome()">← 返回首页</button>
-  <p>基于主销品输出能力与配件承接能力的双视角分析</p>
+  <p>该模块围绕“主销品带动搭售件的销售能力”和“搭售件被带效率”双视角展开。核心分析目的是识别高价值搭配、低效搭售件以及具备优化空间的主销品， 用于支撑产品组合设计、页面推荐策略优化与结构治理。页面采用虚拟数据演示。</p>
 </div>
 
 <div class="container">
@@ -79,19 +79,19 @@ th{background:#1f2937}
 
   <!-- KPI -->
   <div class="card">
-    <h3>1.1 整体搭售能力</h3>
+    <h3>核心指标</h3>
     <div class="kpis">
 
       <div class="kpi">
         <div class="value">10</div>
         主销品销量
-        <div class="desc">目的：衡量销售规模<br>公式：订单数</div>
+        <div class="desc">目的：衡量主销品的销售规模<br>公式：ysku销量</div>
       </div>
 
       <div class="kpi">
         <div class="value">7</div>
         搭售销量
-        <div class="desc">目的：衡量实际被带出的搭售件销量规模<br>公式：搭售订单数</div>
+        <div class="desc">目的：衡量实际被带出的搭售件销量规模<br>公式：搭售件销量</div>
       </div>
 
       <div class="kpi">
@@ -103,28 +103,29 @@ th{background:#1f2937}
       <div class="kpi">
         <div class="value">$290</div>
         搭售金额
-        <div class="desc">目的：评估收入贡献<br>公式：搭售收入</div>
+        <div class="desc">目的：主销品带动产生的配件收入（仅统计搭售行为产生的收入）<br>公式：搭售件在搭售订单中的运营销售收入</div>
       </div>
 
     </div>
   </div>
 
-  <!-- 新增：1.2 小标题 -->
+  <!-- 新增：1.1 小标题 -->
   <div class="card">
-    <h3 class="section-subtitle">1.2 搭售结构分析</h3>
+    <h3 class="section-subtitle">1.1 搭售结构分析</h3>
   </div>
 
   <!-- 结构 -->
   <div class="grid">
 
     <div class="card">
-      <h3>1.2 不同配件搭售率</h3>
+      <h3>1.1.1 不同搭售件搭售率</h3>
+      <div class="note">目的：识别该主销品最容易带出的配件。<br>看法：高搭售率配件可作为页面默认推荐，高销量但低搭售率的配件则提示推荐策略可能不足。</div>
       <div id="c1" class="chart"></div>
     </div>
 
     <div class="card">
-      <h3>不同配件搭售金额（单位：$）</h3>
-      <div class="note">搭售占比相加 = 100%</div>
+      <h3>1.1.2 不同搭售件搭售金额（单位：$）</h3>
+      <div class="note">仅统计搭售行为下产生的搭售件收入。</div>
       <div id="c2" class="chart"></div>
     </div>
 
@@ -144,12 +145,12 @@ th{background:#1f2937}
   <div class="grid">
 
     <div class="card">
-      <h3>搭售率趋势</h3>
+      <h3>1.1.3 搭售率趋势</h3>
       <div id="c8" class="chart"></div>
     </div>
 
     <div class="card">
-      <h3>搭售金额趋势</h3>
+      <h3>1.1.4 搭售金额趋势</h3>
       <div id="c9" class="chart"></div>
     </div>
 
@@ -157,11 +158,11 @@ th{background:#1f2937}
 
   <!-- 1.3：替换为结构分析 -->
   <div class="card">
-    <h3>1.3 结构分析：主销品 × 搭售件矩阵</h3>
+    <h3>1.1.5 结构分析：主销品 × 搭售件矩阵</h3>
     <div class="desc">
-      看什么：一个主销品下，不同搭售件的组合表现。<br>
-      怎么看：横轴看组合搭售率，纵轴看组合搭售金额，气泡大小看组合搭售销量。<br>
-      判断：高频组合看组合搭售销量 / 搭售率，高价值组合看组合搭售金额，低频且低价值组合可视为无效组合。
+      目的：一个主销品下，不同搭售件的组合表现。<br>
+      说明：横轴为搭售率，纵轴为搭售金额，气泡大小看搭售销量。<br>
+      判断：高频组合看搭售销量/搭售率，高价值看搭售金额，低频且低价值可视为无效组合。
     </div>
     <div id="c3" style="height:420px"></div>
   </div>
@@ -169,11 +170,11 @@ th{background:#1f2937}
   <div class="grid">
 
     <div class="card">
-      <h3>1.3 组合识别结果</h3>
+      <h3>1.1.6 组合识别结果</h3>
       <div class="desc">
         组合搭售销量 = 该主销品带出该搭售件的销量<br>
-        组合搭售率 = 组合搭售销量 / 主销品销量<br>
-        组合搭售金额 = 组合搭售销量 × 配件单价
+        组合搭售率 = 组合搭售销量/主销品销量<br>
+        组合搭售金额 = 组合搭售销量 × 搭售件单价
       </div>
 
       <table>
@@ -220,12 +221,21 @@ th{background:#1f2937}
       </table>
     </div>
 
+    <!-- 新增：1.2 小标题 -->
+  <div class="card">
+    <h3 class="section-subtitle">1.2 不同主销品的搭售表现对比</h3>
+  </div>
+
+  <!-- 结构 -->
+  <div class="grid">
+
     <div class="card">
-      <h3>1.4 主销品分层定位</h3>
+      
+      <h3>1.2.1 主销品分层定位</h3>
       <div class="desc">
-        看什么：主销品整体销量与整体搭售率。<br>
-        怎么看：横轴看主销品销量，纵轴看主销品整体搭售率。<br>
-        解释：销量代表流量规模，搭售率代表转化能力。<br>
+        目的：主销品整体销量与整体搭售率。<br>
+        说明：横轴为主销品销量，纵轴为主销品整体搭售率。<br>
+        解释：销量代表规模，搭售率代表转化能力。<br>
         当前阈值：高销量 ≥ 70，高搭售率 ≥ 50%。
       </div>
       <div id="c12" class="chart"></div>
@@ -234,7 +244,7 @@ th{background:#1f2937}
   </div>
 
   <div class="card">
-    <h3>1.4 分层定位结果</h3>
+    <h3>1.2.2 分层定位结果</h3>
     <div class="desc">
       主销品整体搭售率 = 该主销品带出的搭售总销量 / 该主销品销量
     </div>
@@ -291,7 +301,7 @@ th{background:#1f2937}
 
   <!-- KPI -->
   <div class="card">
-    <h3>2.1 搭售整体能力</h3>
+    <h3>核心指标</h3>
 
     <div class="kpis">
       <div class="kpi">
