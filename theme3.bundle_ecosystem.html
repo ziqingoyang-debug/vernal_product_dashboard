@@ -53,7 +53,7 @@ th{background:#1f2937}
 <div class="header">
   <h2>搭售生态分析看板</h2>
   <button class="home-btn" onclick="goHome()">← 返回首页</button>
-  <p>该模块围绕“主销品带动搭售件的销售能力”和“搭售件被带效率”双视角展开。核心分析目的是识别高价值搭配、低效搭售件以及具备优化空间的主销品， 用于支撑产品组合设计、页面推荐策略优化与结构治理。页面采用虚拟数据演示。</p>
+  <p>基于主销品输出能力与配件承接能力的双视角分析</p>
 </div>
 
 <div class="container">
@@ -79,19 +79,19 @@ th{background:#1f2937}
 
   <!-- KPI -->
   <div class="card">
-    <h3>核心指标</h3>
+    <h3>1.1 整体搭售能力</h3>
     <div class="kpis">
 
       <div class="kpi">
         <div class="value">10</div>
         主销品销量
-        <div class="desc">目的：衡量主销品的销售规模<br>公式：ysku销量</div>
+        <div class="desc">目的：衡量销售规模<br>公式：订单数</div>
       </div>
 
       <div class="kpi">
         <div class="value">7</div>
         搭售销量
-        <div class="desc">目的：衡量实际被带出的搭售件销量规模<br>公式：搭售件销量</div>
+        <div class="desc">目的：衡量实际被带出的搭售件销量规模<br>公式：搭售订单数</div>
       </div>
 
       <div class="kpi">
@@ -103,35 +103,31 @@ th{background:#1f2937}
       <div class="kpi">
         <div class="value">$290</div>
         搭售金额
-        <div class="desc">目的：主销品带动产生的配件收入（仅统计搭售行为产生的收入）<br>公式：搭售件在搭售订单中的运营销售收入</div>
+        <div class="desc">目的：评估收入贡献<br>公式：搭售收入</div>
       </div>
 
     </div>
   </div>
 
-  <!-- 新增：1.1 小标题 -->
   <div class="card">
-    <h3 class="section-subtitle">1.1 搭售结构分析</h3>
+    <h3 class="section-subtitle">1.2 搭售结构分析</h3>
   </div>
 
-  <!-- 结构 -->
   <div class="grid">
 
     <div class="card">
-      <h3>1.1.1 不同搭售件搭售率</h3>
-      <div class="note">目的：识别该主销品最容易带出的配件。<br>看法：高搭售率配件可作为页面默认推荐，高销量但低搭售率的配件则提示推荐策略可能不足。</div>
+      <h3>1.2 不同配件搭售率</h3>
       <div id="c1" class="chart"></div>
     </div>
 
     <div class="card">
-      <h3>1.1.2 不同搭售件搭售金额（单位：$）</h3>
-      <div class="note">仅统计搭售行为下产生的搭售件收入。</div>
+      <h3>不同配件搭售金额（单位：$）</h3>
+      <div class="note">搭售占比相加 = 100%</div>
       <div id="c2" class="chart"></div>
     </div>
 
   </div>
 
-  <!-- 新增：选定特定搭售件 -->
   <div class="card">
     <h3 class="section-subtitle">选定特定搭售件</h3>
     <div class="desc" style="margin-top:8px;">筛选搭售件</div>
@@ -141,108 +137,102 @@ th{background:#1f2937}
     </select>
   </div>
 
-  <!-- 新增：下钻趋势图 -->
   <div class="grid">
 
     <div class="card">
-      <h3>1.1.3 搭售率趋势</h3>
+      <h3>搭售率趋势</h3>
       <div id="c8" class="chart"></div>
     </div>
 
     <div class="card">
-      <h3>1.1.4 搭售金额趋势</h3>
+      <h3>搭售金额趋势</h3>
       <div id="c9" class="chart"></div>
     </div>
 
   </div>
 
-  <!-- 1.3：替换为结构分析 -->
+  <!-- 1.1.5 全宽 -->
   <div class="card">
     <h3>1.1.5 结构分析：主销品 × 搭售件矩阵</h3>
     <div class="desc">
       目的：一个主销品下，不同搭售件的组合表现。<br>
       说明：横轴为搭售率，纵轴为搭售金额，气泡大小看搭售销量。<br>
-      判断：高频组合看搭售销量/搭售率，高价值看搭售金额，低频且低价值可视为无效组合。
+      判断：高频组合看搭售销量+搭售率，高价值看搭售金额，低频且低价值可视为无效组合。
     </div>
     <div id="c3" style="height:420px"></div>
   </div>
 
-  <div class="grid">
-
-    <div class="card">
-      <h3>1.1.6 组合识别结果</h3>
-      <div class="desc">
-        组合搭售销量 = 该主销品带出该搭售件的销量<br>
-        组合搭售率 = 组合搭售销量/主销品销量<br>
-        组合搭售金额 = 组合搭售销量 × 搭售件单价
-      </div>
-
-      <table>
-        <tr>
-          <th>组合</th>
-          <th>搭售销量</th>
-          <th>搭售率</th>
-          <th>单价</th>
-          <th>搭售金额</th>
-          <th>标签</th>
-        </tr>
-        <tr>
-          <td>v0.7一型整桌 × V系列边柜</td>
-          <td>5</td>
-          <td>50%</td>
-          <td>$50</td>
-          <td>$250</td>
-          <td style="color:#22c55e">高频 + 高价值</td>
-        </tr>
-        <tr>
-          <td>v0.7一型整桌 × 小高台</td>
-          <td>2</td>
-          <td>20%</td>
-          <td>$20</td>
-          <td>$40</td>
-          <td style="color:#f59e0b">常见搭配</td>
-        </tr>
-        <tr>
-          <td>v0.7一型整桌 × 线缆</td>
-          <td>1</td>
-          <td>10%</td>
-          <td>$30</td>
-          <td>$30</td>
-          <td style="color:#ef4444">低频低价值</td>
-        </tr>
-        <tr>
-          <td>v0.7一型整桌 × 键盘托</td>
-          <td>1</td>
-          <td>10%</td>
-          <td>$20</td>
-          <td>$20</td>
-          <td style="color:#ef4444">低频低价值</td>
-        </tr>
-      </table>
+  <!-- 1.1.6 全宽 -->
+  <div class="card">
+    <h3>1.1.6 组合识别结果</h3>
+    <div class="desc">
+      组合搭售销量 = 该主销品带出该搭售件的销量<br>
+      组合搭售率 = 组合搭售销量 / 主销品销量<br>
+      组合搭售金额 = 组合搭售销量 × 搭售件单价
     </div>
 
-    <!-- 新增：1.2 小标题 -->
+    <table>
+      <tr>
+        <th>组合</th>
+        <th>搭售销量</th>
+        <th>搭售率</th>
+        <th>单价</th>
+        <th>搭售金额</th>
+        <th>标签</th>
+      </tr>
+      <tr>
+        <td>v0.7一型整桌 × V系列边柜</td>
+        <td>5</td>
+        <td>50%</td>
+        <td>$50</td>
+        <td>$250</td>
+        <td style="color:#22c55e">高频 + 高价值</td>
+      </tr>
+      <tr>
+        <td>v0.7一型整桌 × 小高台</td>
+        <td>7</td>
+        <td>70%</td>
+        <td>$28.57</td>
+        <td>$200</td>
+        <td style="color:#eab308">常见搭配</td>
+      </tr>
+      <tr>
+        <td>v0.7一型整桌 × 线缆</td>
+        <td>1</td>
+        <td>10%</td>
+        <td>$30</td>
+        <td>$30</td>
+        <td style="color:#ef4444">低频低价值</td>
+      </tr>
+      <tr>
+        <td>v0.7一型整桌 × 键盘托</td>
+        <td>1</td>
+        <td>10%</td>
+        <td>$20</td>
+        <td>$20</td>
+        <td style="color:#ef4444">低频低价值</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 新增：1.2 小标题 -->
   <div class="card">
     <h3 class="section-subtitle">1.2 不同主销品的搭售表现对比</h3>
   </div>
 
-  <!-- 结构 -->
-  <div class="grid">
-
-    <div class="card">
-      
-      <h3>1.2.1 主销品分层定位</h3>
-      <div class="desc">
-        目的：主销品整体销量与整体搭售率。<br>
-        说明：横轴为主销品销量，纵轴为主销品整体搭售率。<br>
-        解释：销量代表规模，搭售率代表转化能力。<br>
-        当前阈值：高销量 ≥ 70，高搭售率 ≥ 50%。
-      </div>
-      <div id="c12" class="chart"></div>
+  <!-- 1.2.1 全宽 -->
+  <div class="card">
+    <h3>1.2.1 主销品分层定位</h3>
+    <div class="desc">
+      目的：主销品整体销量与整体搭售率。<br>
+      说明：横轴为主销品销量，纵轴为主销品整体搭售率。<br>
+      解释：销量代表规模，搭售率代表转化能力。<br>
+      当前阈值：高销量 ≥ 70，高搭售率 ≥ 50%。
     </div>
-
+    <div id="c12" class="chart"></div>
   </div>
 
+  <!-- 1.2.2 全宽 -->
   <div class="card">
     <h3>1.2.2 分层定位结果</h3>
     <div class="desc">
@@ -287,6 +277,7 @@ th{background:#1f2937}
 
 
   <!-- ========== 二、搭售件视角 ========== -->
+  <!-- 二、标题全宽 -->
   <div class="card">
     <h3>二、搭售件视角</h3>
     <div class="desc">筛选搭售件</div>
@@ -299,10 +290,9 @@ th{background:#1f2937}
     </select>
   </div>
 
-  <!-- KPI -->
+  <!-- 核心指标全宽 -->
   <div class="card">
     <h3>核心指标</h3>
-
     <div class="kpis">
       <div class="kpi">
         <div class="value">8</div>
@@ -328,17 +318,11 @@ th{background:#1f2937}
         <div class="desc">目的：衡量该配件脱离主销品后的独立销售能力<br>公式：单独销售订单数</div>
       </div>
     </div>
-
   </div>
 
-  <!-- 来源 + 结构 -->
+  <!-- 2.2 删除 -->
+  <!-- 2.3 和 2.5 同行 -->
   <div class="grid">
-
-    <div class="card">
-      <h3>2.2 主销品来源分析</h3>
-      <div class="desc">目的：识别该配件的主要带动来源</div>
-      <div id="c4" class="chart"></div>
-    </div>
 
     <div class="card">
       <h3>2.3 搭售结构</h3>
@@ -346,31 +330,32 @@ th{background:#1f2937}
       <div id="c5" class="chart"></div>
     </div>
 
+    <div class="card">
+      <h3>2.5 配件视角：所选配件对各主销品的搭售金额分布</h3>
+      <div class="desc">分析不同主销品贡献</div>
+      <div id="c7" class="chart"></div>
+    </div>
+
   </div>
 
-  <!-- 2.5 -->
-  <div class="card">
-    <h3>2.5 配件视角：所选配件对各主销品的搭售金额分布</h3>
-    <div class="desc">分析不同主销品贡献</div>
-    <div id="c7" class="chart"></div>
-  </div>
-
-  <!-- 调整位置：2.5 下方两张趋势图 -->
+  <!-- 趋势图并列，增加目的描述 -->
   <div class="grid">
 
     <div class="card">
       <h3>搭售件在不同主销品下的搭售销量月度趋势</h3>
+      <div class="desc">目的：识别不同主销品在时间维度上对该搭售件的销量带动变化。</div>
       <div id="c10" class="chart"></div>
     </div>
 
     <div class="card">
       <h3>搭售件在不同主销品下的搭售金额月度趋势</h3>
+      <div class="desc">目的：识别不同主销品在时间维度上对该搭售件的收入贡献变化。</div>
       <div id="c11" class="chart"></div>
     </div>
 
   </div>
 
-  <!-- 2.4：移动到 2.6 上方，并按分层框架修改 -->
+  <!-- 2.4 全宽 -->
   <div class="card">
     <h3>2.4 配件视角：主销品 × 配件 四象限分析</h3>
     <div class="desc">
@@ -385,7 +370,7 @@ th{background:#1f2937}
     <div id="c6" style="height:420px"></div>
   </div>
 
-  <!-- 2.6：放在看板最后，形式不变，按分层框架修改 -->
+  <!-- 2.6 全宽 -->
   <div class="card">
     <h3>2.6 低效/潜力搭售件识别清单</h3>
     <div class="desc">
@@ -465,11 +450,9 @@ th{background:#1f2937}
 <script>
 function goHome(){window.location.href="index.html"}
 
-// 显式绑定 DOM，避免图表丢失
 const c1 = document.getElementById('c1');
 const c2 = document.getElementById('c2');
 const c3 = document.getElementById('c3');
-const c4 = document.getElementById('c4');
 const c5 = document.getElementById('c5');
 const c6 = document.getElementById('c6');
 const c7 = document.getElementById('c7');
@@ -486,7 +469,6 @@ const amountData = [200,150,80,40];
 const amountTotal = amountData.reduce((a,b)=>a+b,0);
 const amountShareData = amountData.map(v => +(v / amountTotal * 100).toFixed(2));
 
-// 新增：下钻趋势数据
 const trendMonths = ["2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03"];
 const accessoryTrendMap = {
   "小高台": {
@@ -499,7 +481,6 @@ const accessoryTrendMap = {
   }
 };
 
-// 新增：多主销品月度趋势数据
 const multiProductMonths = ["2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03"];
 const sourceProductSeriesVolume = {
   "v0.7一型整桌": [2,3,3,4,4,5,5,6,6],
@@ -514,10 +495,9 @@ const sourceProductSeriesAmount = {
   "v0.7L型行政桌": [0.2,0.3,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
 };
 
-// 新增：1.3 结构分析与 1.4 分层定位数据
 const comboMatrixData = [
   {name:"V系列边柜", value:[50,250,5,50], tag:"高频 + 高价值"},
-  {name:"小高台", value:[20,40,2,20], tag:"常见搭配"},
+  {name:"小高台", value:[70,200,7,28.57], tag:"常见搭配"},
   {name:"线缆", value:[10,30,1,30], tag:"低频低价值"},
   {name:"键盘托", value:[10,20,1,20], tag:"低频低价值"}
 ];
@@ -528,7 +508,6 @@ const productLayeringData = [
   {name:"v0.7一型行政桌", value:[40,60,24], tag:"潜力产品"}
 ];
 
-// 新增：2.4 配件分层四象限数据
 const accessoryLayeringData = [
   {name:"显示器支架", value:[85.9,20100000,320,2624], tag:"核心件"},
   {name:"理线槽", value:[85.0,13700000,260,2100], tag:"核心件"},
@@ -537,14 +516,12 @@ const accessoryLayeringData = [
   {name:"键盘托", value:[34.0,1350,120,420], tag:"潜力件"}
 ];
 
-// 统一颜色/样式
 const axisCommon = {
   axisLine:{lineStyle:{color:'#64748b'}},
   axisLabel:{color:'#94a3b8'},
   splitLine:{lineStyle:{color:'rgba(148,163,184,0.16)'}}
 };
 
-// 1.2 左图：改为折线图
 echarts.init(c1).setOption({
   backgroundColor:'transparent',
   tooltip:{
@@ -555,17 +532,8 @@ echarts.init(c1).setOption({
     }
   },
   grid:{left:55,right:25,top:50,bottom:50},
-  xAxis:{
-    type:'category',
-    data:acc,
-    ...axisCommon
-  },
-  yAxis:{
-    type:'value',
-    name:'搭售率(%)',
-    nameTextStyle:{color:'#94a3b8'},
-    ...axisCommon
-  },
+  xAxis:{type:'category',data:acc,...axisCommon},
+  yAxis:{type:'value',name:'搭售率(%)',nameTextStyle:{color:'#94a3b8'},...axisCommon},
   series:[{
     type:"line",
     data:rateData,
@@ -579,7 +547,6 @@ echarts.init(c1).setOption({
   }]
 });
 
-// 1.2 右图：去掉折线，仅保留柱状图中的金额和占比
 echarts.init(c2).setOption({
   backgroundColor:'transparent',
   tooltip:{
@@ -590,44 +557,27 @@ echarts.init(c2).setOption({
       return `${p.name}<br/>搭售金额：$${p.value}<br/>搭售占比：${amountShareData[p.dataIndex]}%`;
     }
   },
-  legend:{
-    top:10,
-    right:10,
-    textStyle:{color:'#cbd5e1'},
-    data:['搭售金额']
-  },
+  legend:{top:10,right:10,textStyle:{color:'#cbd5e1'},data:['搭售金额']},
   grid:{left:60,right:25,top:60,bottom:55},
-  xAxis:{
-    type:'category',
-    data:acc,
-    ...axisCommon
-  },
-  yAxis:{
-    type:'value',
-    name:'搭售金额($)',
-    nameTextStyle:{color:'#94a3b8'},
-    ...axisCommon
-  },
-  series:[
-    {
-      name:'搭售金额',
-      type:'bar',
-      data:amountData,
-      barWidth:48,
-      itemStyle:{color:'#6d8df7'},
-      label:{
-        show:true,
-        position:'inside',
-        formatter:function(p){
-          return `$${p.value}\n${amountShareData[p.dataIndex]}%`;
-        }
-      },
-      emphasis:{focus:'series'}
-    }
-  ]
+  xAxis:{type:'category',data:acc,...axisCommon},
+  yAxis:{type:'value',name:'搭售金额($)',nameTextStyle:{color:'#94a3b8'},...axisCommon},
+  series:[{
+    name:'搭售金额',
+    type:'bar',
+    data:amountData,
+    barWidth:48,
+    itemStyle:{color:'#6d8df7'},
+    label:{
+      show:true,
+      position:'inside',
+      formatter:function(p){
+        return `$${p.value}\n${amountShareData[p.dataIndex]}%`;
+      }
+    },
+    emphasis:{focus:'series'}
+  }]
 });
 
-// 新增：选定特定搭售件 - 搭售率趋势
 function renderAccessoryDrillCharts() {
   const selected = selectedAccessory.value;
   const selectedData = accessoryTrendMap[selected];
@@ -649,12 +599,7 @@ function renderAccessoryDrillCharts() {
       axisLabel:{color:'#94a3b8',interval:0,rotate:0},
       splitLine:{show:false}
     },
-    yAxis:{
-      type:'value',
-      name:'搭售率(%)',
-      nameTextStyle:{color:'#94a3b8'},
-      ...axisCommon
-    },
+    yAxis:{type:'value',name:'搭售率(%)',nameTextStyle:{color:'#94a3b8'},...axisCommon},
     series:[{
       type:'line',
       data:selectedData.rate,
@@ -686,12 +631,7 @@ function renderAccessoryDrillCharts() {
       axisLabel:{color:'#94a3b8',interval:0,rotate:0},
       splitLine:{show:false}
     },
-    yAxis:{
-      type:'value',
-      name:'搭售金额($)',
-      nameTextStyle:{color:'#94a3b8'},
-      ...axisCommon
-    },
+    yAxis:{type:'value',name:'搭售金额($)',nameTextStyle:{color:'#94a3b8'},...axisCommon},
     series:[{
       type:'bar',
       data:selectedData.amount,
@@ -702,11 +642,9 @@ function renderAccessoryDrillCharts() {
     }]
   });
 }
-
 selectedAccessory.addEventListener('change', renderAccessoryDrillCharts);
 renderAccessoryDrillCharts();
 
-// 1.3 结构分析：主销品 × 搭售件矩阵
 echarts.init(c3).setOption({
   backgroundColor:'transparent',
   tooltip:{
@@ -716,40 +654,18 @@ echarts.init(c3).setOption({
     }
   },
   grid:{left:70,right:35,top:50,bottom:65},
-  xAxis:{
-    type:'value',
-    name:'组合搭售率(%)',
-    nameLocation:'middle',
-    nameGap:35,
-    min:0,
-    max:60,
-    ...axisCommon
-  },
-  yAxis:{
-    type:'value',
-    name:'组合搭售金额($)',
-    nameLocation:'middle',
-    nameGap:55,
-    min:0,
-    max:280,
-    ...axisCommon
-  },
+  xAxis:{type:'value',name:'组合搭售率(%)',nameLocation:'middle',nameGap:35,min:0,max:80,...axisCommon},
+  yAxis:{type:'value',name:'组合搭售金额($)',nameLocation:'middle',nameGap:55,min:0,max:280,...axisCommon},
   series:[{
     type:'scatter',
     symbolSize:function(d){ return d[2] * 22; },
     data:comboMatrixData,
     itemStyle:{color:'rgba(109,141,247,0.82)'},
-    label:{
-      show:true,
-      formatter:function(p){ return p.name; },
-      color:'#e5e7eb',
-      fontSize:14
-    },
+    label:{show:true,formatter:function(p){ return p.name; },color:'#e5e7eb',fontSize:14},
     emphasis:{focus:'series'}
   }]
 });
 
-// 1.4 主销品分层定位
 echarts.init(c12).setOption({
   backgroundColor:'transparent',
   tooltip:{
@@ -759,86 +675,24 @@ echarts.init(c12).setOption({
     }
   },
   grid:{left:70,right:35,top:50,bottom:65},
-  xAxis:{
-    type:'value',
-    name:'主销品销量',
-    nameLocation:'middle',
-    nameGap:35,
-    min:0,
-    max:180,
-    ...axisCommon
-  },
-  yAxis:{
-    type:'value',
-    name:'整体搭售率(%)',
-    nameLocation:'middle',
-    nameGap:50,
-    min:0,
-    max:80,
-    ...axisCommon
-  },
+  xAxis:{type:'value',name:'主销品销量',nameLocation:'middle',nameGap:35,min:0,max:180,...axisCommon},
+  yAxis:{type:'value',name:'整体搭售率(%)',nameLocation:'middle',nameGap:50,min:0,max:80,...axisCommon},
   series:[{
     type:'scatter',
     symbolSize:26,
     data:productLayeringData,
     itemStyle:{color:'rgba(109,141,247,0.82)'},
-    label:{
-      show:true,
-      formatter:function(p){ return p.name; },
-      color:'#e5e7eb',
-      fontSize:13
-    },
+    label:{show:true,formatter:function(p){ return p.name; },color:'#e5e7eb',fontSize:13},
     markLine:{
       silent:true,
       symbol:['none','none'],
       lineStyle:{type:'dashed',color:'#94a3b8'},
-      data:[
-        {xAxis:70},
-        {yAxis:50}
-      ]
+      data:[{xAxis:70},{yAxis:50}]
     },
     emphasis:{focus:'series'}
   }]
 });
 
-// 2.2 来源
-echarts.init(c4).setOption({
-  backgroundColor:'transparent',
-  tooltip:{
-    trigger:'axis',
-    axisPointer:{type:'shadow'},
-    formatter:function(params){
-      const p = params[0];
-      return `${p.name}<br/>来源销量：${p.value}`;
-    }
-  },
-  grid:{left:55,right:20,top:40,bottom:70},
-  xAxis:{
-    type:'category',
-    data:[
-      "v0.7一型整桌",
-      "v0.7L型整桌",
-      "v0.7一型行政桌",
-      "v0.7L型行政桌"
-    ],
-    axisLine:{lineStyle:{color:'#64748b'}},
-    axisLabel:{color:'#94a3b8',interval:0,rotate:0},
-    splitLine:{show:false}
-  },
-  yAxis:{
-    type:'value',
-    ...axisCommon
-  },
-  series:[{
-    type:"bar",
-    data:[5,3,2,1],
-    itemStyle:{color:'#6d8df7'},
-    label:{show:true},
-    emphasis:{focus:'series'}
-  }]
-});
-
-// 2.3 结构
 echarts.init(c5).setOption({
   backgroundColor:'transparent',
   tooltip:{
@@ -847,10 +701,7 @@ echarts.init(c5).setOption({
       return `${p.name}<br/>数量：${p.value}<br/>占比：${p.percent}%`;
     }
   },
-  legend:{
-    bottom:0,
-    textStyle:{color:'#cbd5e1'}
-  },
+  legend:{bottom:0,textStyle:{color:'#cbd5e1'}},
   series:[{
     type:"pie",
     radius:['40%','70%'],
@@ -863,7 +714,6 @@ echarts.init(c5).setOption({
   }]
 });
 
-// 2.5
 echarts.init(c7).setOption({
   backgroundColor:'transparent',
   tooltip:{
@@ -877,12 +727,7 @@ echarts.init(c7).setOption({
   grid:{left:60,right:20,top:40,bottom:70},
   xAxis:{
     type:'category',
-    data:[
-      "v0.7一型整桌",
-      "v0.7L型整桌",
-      "v0.7一型行政桌",
-      "v0.7L型行政桌"
-    ],
+    data:["v0.7一型整桌","v0.7L型整桌","v0.7一型行政桌","v0.7L型行政桌"],
     axisLine:{lineStyle:{color:'#64748b'}},
     axisLabel:{color:'#94a3b8',interval:0},
     splitLine:{show:false}
@@ -890,41 +735,29 @@ echarts.init(c7).setOption({
   yAxis:{
     type:'value',
     axisLine:{lineStyle:{color:'#64748b'}},
-    axisLabel:{
-      color:'#94a3b8',
-      formatter:function(v){ return '$' + (v/1000000) + 'M'; }
-    },
+    axisLabel:{color:'#94a3b8',formatter:function(v){ return '$' + (v/1000000) + 'M'; }},
     splitLine:{lineStyle:{color:'rgba(148,163,184,0.16)'}}
   },
   series:[{
     type:"bar",
     data:[5000000,4300000,5600000,5200000],
     itemStyle:{color:'#6d8df7'},
-    label:{
-      show:true,
-      formatter:function(p){ return '$' + (p.value/1000000) + 'M'; }
-    },
+    label:{show:true,formatter:function(p){ return '$' + (p.value/1000000) + 'M'; }},
     emphasis:{focus:'series'}
   }]
 });
 
-// 搭售件在不同主销品下的搭售销量月度趋势
 echarts.init(c10).setOption({
   backgroundColor:'transparent',
   tooltip:{
     trigger:'axis',
     formatter:function(params){
       const lines = [`销售月份：${params[0].axisValue}`];
-      params.forEach(function(p){
-        lines.push(`${p.seriesName}：${p.value}`);
-      });
+      params.forEach(function(p){ lines.push(`${p.seriesName}：${p.value}`); });
       return lines.join('<br/>');
     }
   },
-  legend:{
-    top:10,
-    textStyle:{color:'#cbd5e1'}
-  },
+  legend:{top:10,textStyle:{color:'#cbd5e1'}},
   grid:{left:60,right:25,top:60,bottom:70},
   xAxis:{
     type:'category',
@@ -933,12 +766,7 @@ echarts.init(c10).setOption({
     axisLabel:{color:'#94a3b8',interval:0},
     splitLine:{show:false}
   },
-  yAxis:{
-    type:'value',
-    name:'搭售数量',
-    nameTextStyle:{color:'#94a3b8'},
-    ...axisCommon
-  },
+  yAxis:{type:'value',name:'搭售数量',nameTextStyle:{color:'#94a3b8'},...axisCommon},
   series:Object.keys(sourceProductSeriesVolume).map(function(name){
     return {
       name:name,
@@ -953,23 +781,17 @@ echarts.init(c10).setOption({
   })
 });
 
-// 搭售件在不同主销品下的搭售金额月度趋势
 echarts.init(c11).setOption({
   backgroundColor:'transparent',
   tooltip:{
     trigger:'axis',
     formatter:function(params){
       const lines = [`销售月份：${params[0].axisValue}`];
-      params.forEach(function(p){
-        lines.push(`${p.seriesName}：$${p.value}M`);
-      });
+      params.forEach(function(p){ lines.push(`${p.seriesName}：$${p.value}M`); });
       return lines.join('<br/>');
     }
   },
-  legend:{
-    top:10,
-    textStyle:{color:'#cbd5e1'}
-  },
+  legend:{top:10,textStyle:{color:'#cbd5e1'}},
   grid:{left:60,right:25,top:60,bottom:70},
   xAxis:{
     type:'category',
@@ -983,10 +805,7 @@ echarts.init(c11).setOption({
     name:'搭售金额',
     nameTextStyle:{color:'#94a3b8'},
     axisLine:{lineStyle:{color:'#64748b'}},
-    axisLabel:{
-      color:'#94a3b8',
-      formatter:function(v){ return '$' + v + 'M'; }
-    },
+    axisLabel:{color:'#94a3b8',formatter:function(v){ return '$' + v + 'M'; }},
     splitLine:{lineStyle:{color:'rgba(148,163,184,0.16)'}}
   },
   series:Object.keys(sourceProductSeriesAmount).map(function(name){
@@ -1003,7 +822,6 @@ echarts.init(c11).setOption({
   })
 });
 
-// 2.4 配件分层四象限分析
 echarts.init(c6).setOption({
   backgroundColor:'transparent',
   tooltip:{
@@ -1046,31 +864,21 @@ echarts.init(c6).setOption({
     symbolSize:function(d){ return Math.max(28, Math.sqrt(d[2]) * 6); },
     data:accessoryLayeringData,
     itemStyle:{color:'rgba(109,141,247,0.82)'},
-    label:{
-      show:true,
-      formatter:function(p){ return p.name; },
-      color:'#e5e7eb',
-      fontSize:13
-    },
+    label:{show:true,formatter:function(p){ return p.name; },color:'#e5e7eb',fontSize:13},
     markLine:{
       silent:true,
       symbol:['none','none'],
       lineStyle:{type:'dashed',color:'#94a3b8'},
-      data:[
-        {xAxis:50},
-        {yAxis:300}
-      ]
+      data:[{xAxis:50},{yAxis:300}]
     },
     emphasis:{focus:'series'}
   }]
 });
 
-// 响应式
 window.addEventListener('resize', function(){
   echarts.getInstanceByDom(c1)?.resize();
   echarts.getInstanceByDom(c2)?.resize();
   echarts.getInstanceByDom(c3)?.resize();
-  echarts.getInstanceByDom(c4)?.resize();
   echarts.getInstanceByDom(c5)?.resize();
   echarts.getInstanceByDom(c6)?.resize();
   echarts.getInstanceByDom(c7)?.resize();
