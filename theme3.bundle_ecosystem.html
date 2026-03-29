@@ -338,17 +338,6 @@ th{background:#1f2937}
 
   </div>
 
-  <!-- 2.4 -->
-  <div class="card">
-    <h3>2.4 配件视角：主销品 × 配件 四象限分析</h3>
-    <div class="desc">
-      横轴：搭售占比<br>
-      纵轴：搭售金额($)<br>
-      气泡大小：搭售销量
-    </div>
-    <div id="c6" style="height:420px"></div>
-  </div>
-
   <!-- 2.5 -->
   <div class="card">
     <h3>2.5 配件视角：所选配件对各主销品的搭售金额分布</h3>
@@ -371,12 +360,27 @@ th{background:#1f2937}
 
   </div>
 
-  <!-- 2.6 -->
+  <!-- 2.4：移动到 2.6 上方，并按分层框架修改 -->
+  <div class="card">
+    <h3>2.4 配件视角：主销品 × 配件 四象限分析</h3>
+    <div class="desc">
+      横轴：搭售占比<br>
+      纵轴：搭售金额($)<br>
+      气泡大小：产品定价毛利润<br>
+      四象限原点：搭售金额 = $300，搭售占比 = 50%<br>
+      第一象限：高金额（≥ $300）+ 高搭售占比（≥ 50%）= 核心件<br>
+      第二象限：高金额（≥ $300）+ 低搭售占比（≤ 50%）= 潜力件<br>
+      第四象限：低金额（≤ $300）+ 低搭售占比（≤ 50%）= 低效件
+    </div>
+    <div id="c6" style="height:420px"></div>
+  </div>
+
+  <!-- 2.6：放在看板最后，形式不变，按分层框架修改 -->
   <div class="card">
     <h3>2.6 低效/潜力搭售件识别清单</h3>
     <div class="desc">
       目的：输出直接可用于业务讨论的清单。<br>
-      看法：高搭售率高金额为“核心件”，高金额低搭售率为“潜力件”，低金额低搭售率为“低效件”，可进入优化或淘汰评估。
+      看法：高金额高搭售占比为“核心件”，高金额低搭售占比为“潜力件”，低金额低搭售占比为“低效件”，可进入优化或淘汰评估。
     </div>
 
     <table>
@@ -404,7 +408,7 @@ th{background:#1f2937}
         <td>$0.96M</td>
         <td>85%</td>
         <td>37%</td>
-        <td style="color:#ef4444">低效件</td>
+        <td style="color:#22c55e">核心件</td>
       </tr>
 
       <tr>
@@ -485,7 +489,7 @@ const accessoryTrendMap = {
   }
 };
 
-// 新增：2.4 下方多主销品月度趋势数据
+// 新增：多主销品月度趋势数据
 const multiProductMonths = ["2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03"];
 const sourceProductSeriesVolume = {
   "v0.7一型整桌": [2,3,3,4,4,5,5,6,6],
@@ -512,6 +516,15 @@ const productLayeringData = [
   {name:"v0.7一型整桌", value:[120,60,72], tag:"优质入口"},
   {name:"v0.7L型整桌", value:[150,30,45], tag:"优化重点"},
   {name:"v0.7一型行政桌", value:[40,60,24], tag:"潜力产品"}
+];
+
+// 新增：2.4 配件分层四象限数据
+const accessoryLayeringData = [
+  {name:"显示器支架", value:[85.9,20100000,320,2624], tag:"核心件"},
+  {name:"理线槽", value:[85.0,13700000,260,2100], tag:"核心件"},
+  {name:"抽屉", value:[85.0,7900000,220,1600], tag:"核心件"},
+  {name:"杯架", value:[18.0,280,40,155], tag:"低效件"},
+  {name:"键盘托", value:[34.0,1350,120,420], tag:"潜力件"}
 ];
 
 // 统一颜色/样式
@@ -840,60 +853,52 @@ echarts.init(c5).setOption({
   }]
 });
 
-// 2.4 四象限（保持原有，不删减）
-echarts.init(c6).setOption({
+// 2.5
+echarts.init(c7).setOption({
   backgroundColor:'transparent',
   tooltip:{
-    trigger:'item',
-    formatter:function(p){
-      return `${p.name}<br/>搭售占比：${p.value[0]}%<br/>搭售金额：$${p.value[1].toLocaleString()}<br/>搭售销量：${p.value[2]}`;
+    trigger:'axis',
+    axisPointer:{type:'shadow'},
+    formatter:function(params){
+      const p = params[0];
+      return `${p.name}<br/>搭售金额：$${p.value.toLocaleString()}`;
     }
   },
-  grid:{left:70,right:35,top:50,bottom:65},
+  grid:{left:60,right:20,top:40,bottom:70},
   xAxis:{
-    type:'value',
-    name:"搭售占比",
-    nameLocation:'middle',
-    nameGap:35,
+    type:'category',
+    data:[
+      "v0.7一型整桌",
+      "v0.7L型整桌",
+      "v0.7一型行政桌",
+      "v0.7L型行政桌"
+    ],
     axisLine:{lineStyle:{color:'#64748b'}},
-    axisLabel:{color:'#94a3b8',formatter:'{value}%'},
-    splitLine:{lineStyle:{color:'rgba(148,163,184,0.16)'}}
+    axisLabel:{color:'#94a3b8',interval:0},
+    splitLine:{show:false}
   },
   yAxis:{
     type:'value',
-    name:"搭售金额",
-    nameLocation:'middle',
-    nameGap:55,
     axisLine:{lineStyle:{color:'#64748b'}},
     axisLabel:{
       color:'#94a3b8',
-      formatter:function(v){
-        if(v >= 1000000){ return '$' + (v/1000000).toFixed(1) + 'M'; }
-        return '$' + v;
-      }
+      formatter:function(v){ return '$' + (v/1000000) + 'M'; }
     },
     splitLine:{lineStyle:{color:'rgba(148,163,184,0.16)'}}
   },
   series:[{
-    type:'scatter',
-    symbolSize:function(d){ return Math.sqrt(d[2]) * 2.2; },
-    data:[
-      {value:[85,20000000,2600],name:"显示器支架"},
-      {value:[86,13700000,2100],name:"理线槽"},
-      {value:[85,7900000,1600],name:"抽屉"},
-      {value:[75,2600000,700],name:"杯架"}
-    ],
-    itemStyle:{color:'rgba(109,141,247,0.82)'},
+    type:"bar",
+    data:[5000000,4300000,5600000,5200000],
+    itemStyle:{color:'#6d8df7'},
     label:{
       show:true,
-      formatter:function(p){ return p.name; },
-      color:'#e5e7eb'
+      formatter:function(p){ return '$' + (p.value/1000000) + 'M'; }
     },
     emphasis:{focus:'series'}
   }]
 });
 
-// 新增：2.4 下方 - 搭售销量月度趋势（现位于2.5下方，显示数据）
+// 搭售件在不同主销品下的搭售销量月度趋势
 echarts.init(c10).setOption({
   backgroundColor:'transparent',
   tooltip:{
@@ -938,7 +943,7 @@ echarts.init(c10).setOption({
   })
 });
 
-// 新增：2.4 下方 - 搭售金额月度趋势（现位于2.5下方，显示数据）
+// 搭售件在不同主销品下的搭售金额月度趋势
 echarts.init(c11).setOption({
   backgroundColor:'transparent',
   tooltip:{
@@ -988,46 +993,63 @@ echarts.init(c11).setOption({
   })
 });
 
-// 2.5
-echarts.init(c7).setOption({
+// 2.4 配件分层四象限分析
+echarts.init(c6).setOption({
   backgroundColor:'transparent',
   tooltip:{
-    trigger:'axis',
-    axisPointer:{type:'shadow'},
-    formatter:function(params){
-      const p = params[0];
-      return `${p.name}<br/>搭售金额：$${p.value.toLocaleString()}`;
+    trigger:'item',
+    formatter:function(p){
+      return `${p.name}<br/>搭售占比：${p.value[0]}%<br/>搭售金额：$${p.value[1].toLocaleString()}<br/>产品定价毛利润：$${p.value[2].toLocaleString()}<br/>销量：${p.value[3]}<br/>分层：${p.data.tag}`;
     }
   },
-  grid:{left:60,right:20,top:40,bottom:70},
+  grid:{left:70,right:35,top:50,bottom:65},
   xAxis:{
-    type:'category',
-    data:[
-      "v0.7一型整桌",
-      "v0.7L型整桌",
-      "v0.7一型行政桌",
-      "v0.7L型行政桌"
-    ],
+    type:'value',
+    name:"搭售占比",
+    nameLocation:'middle',
+    nameGap:35,
+    min:0,
+    max:100,
     axisLine:{lineStyle:{color:'#64748b'}},
-    axisLabel:{color:'#94a3b8',interval:0},
-    splitLine:{show:false}
+    axisLabel:{color:'#94a3b8',formatter:'{value}%'},
+    splitLine:{lineStyle:{color:'rgba(148,163,184,0.16)'}}
   },
   yAxis:{
     type:'value',
+    name:"搭售金额",
+    nameLocation:'middle',
+    nameGap:55,
+    min:0,
+    max:22000000,
     axisLine:{lineStyle:{color:'#64748b'}},
     axisLabel:{
       color:'#94a3b8',
-      formatter:function(v){ return '$' + (v/1000000) + 'M'; }
+      formatter:function(v){
+        if(v >= 1000000){ return '$' + (v/1000000).toFixed(1) + 'M'; }
+        return '$' + v;
+      }
     },
     splitLine:{lineStyle:{color:'rgba(148,163,184,0.16)'}}
   },
   series:[{
-    type:"bar",
-    data:[5000000,4300000,5600000,5200000],
-    itemStyle:{color:'#6d8df7'},
+    type:'scatter',
+    symbolSize:function(d){ return Math.max(28, Math.sqrt(d[2]) * 6); },
+    data:accessoryLayeringData,
+    itemStyle:{color:'rgba(109,141,247,0.82)'},
     label:{
       show:true,
-      formatter:function(p){ return '$' + (p.value/1000000) + 'M'; }
+      formatter:function(p){ return p.name; },
+      color:'#e5e7eb',
+      fontSize:13
+    },
+    markLine:{
+      silent:true,
+      symbol:['none','none'],
+      lineStyle:{type:'dashed',color:'#94a3b8'},
+      data:[
+        {xAxis:50},
+        {yAxis:300}
+      ]
     },
     emphasis:{focus:'series'}
   }]
