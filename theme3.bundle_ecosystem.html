@@ -349,7 +349,14 @@ th{background:#1f2937}
     <div id="c6" style="height:420px"></div>
   </div>
 
-  <!-- 新增：2.4 下方两张趋势图 -->
+  <!-- 2.5 -->
+  <div class="card">
+    <h3>2.5 配件视角：所选配件对各主销品的搭售金额分布</h3>
+    <div class="desc">分析不同主销品贡献</div>
+    <div id="c7" class="chart"></div>
+  </div>
+
+  <!-- 调整位置：2.5 下方两张趋势图 -->
   <div class="grid">
 
     <div class="card">
@@ -362,13 +369,6 @@ th{background:#1f2937}
       <div id="c11" class="chart"></div>
     </div>
 
-  </div>
-
-  <!-- 2.5 -->
-  <div class="card">
-    <h3>2.5 配件视角：所选配件对各主销品的搭售金额分布</h3>
-    <div class="desc">分析不同主销品贡献</div>
-    <div id="c7" class="chart"></div>
   </div>
 
   <!-- 2.6 -->
@@ -893,7 +893,7 @@ echarts.init(c6).setOption({
   }]
 });
 
-// 新增：2.4 下方 - 搭售销量月度趋势
+// 新增：2.4 下方 - 搭售销量月度趋势（现位于2.5下方，显示数据）
 echarts.init(c10).setOption({
   backgroundColor:'transparent',
   tooltip:{
@@ -932,13 +932,13 @@ echarts.init(c10).setOption({
       symbol:'circle',
       symbolSize:7,
       data:sourceProductSeriesVolume[name],
-      label:{show:false},
+      label:{show:true,formatter:'{c}'},
       emphasis:{focus:'series'}
     }
   })
 });
 
-// 新增：2.4 下方 - 搭售金额月度趋势
+// 新增：2.4 下方 - 搭售金额月度趋势（现位于2.5下方，显示数据）
 echarts.init(c11).setOption({
   backgroundColor:'transparent',
   tooltip:{
@@ -982,7 +982,7 @@ echarts.init(c11).setOption({
       symbol:'circle',
       symbolSize:7,
       data:sourceProductSeriesAmount[name],
-      label:{show:false},
+      label:{show:true,formatter:function(p){ return '$' + p.value + 'M'; }},
       emphasis:{focus:'series'}
     }
   })
